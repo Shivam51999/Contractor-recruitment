@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Work opportunities — Mangalam Landmarks</title>
+<meta name="description" content="Current contractor and labour requirements across Mangalam Landmarks sites in Pune and PCMC. No registration fee. No login.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Noto+Sans+Devanagari:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --maroon:#8E1B1B; --maroon-lt:#AA2121; --gold:#C28D2C;
+    --ink:#1C1A18; --ink-2:#4A4642; --ink-3:#7A746D;
+    --page:#FAF8F4; --card:#FFFFFF; --line:#E4DED4; --line-2:#CFC7B9;
+    --ok:#1D6F4E; --ok-bg:#E8F3ED;
+    --r:10px;
+    --sans:"DM Sans","Noto Sans Devanagari",system-ui,sans-serif;
+    --display:"Cormorant Garamond",Georgia,serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--page);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  body.lang-hi,body.lang-mr{font-family:"Noto Sans Devanagari","DM Sans",system-ui,sans-serif}
+  button,input,select,textarea{font:inherit;color:inherit}
+  :focus-visible{outline:2px solid var(--maroon);outline-offset:2px}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+
+  /* ---------- header ---------- */
+  header{background:var(--maroon);color:#fff;position:sticky;top:0;z-index:40}
+  .bar{display:flex;align-items:center;gap:12px;min-height:60px}
+  .mark{font-family:var(--display);font-size:26px;font-weight:600;letter-spacing:.02em;line-height:1}
+  .mark span{display:block;font-family:var(--sans);font-size:9.5px;font-weight:500;letter-spacing:.16em;opacity:.72;margin-top:3px}
+  .spacer{flex:1}
+  .langs{display:flex;border:1px solid rgba(255,255,255,.35);border-radius:var(--r);overflow:hidden}
+  .langs button{background:none;border:0;color:#fff;padding:7px 11px;font-size:13px;font-weight:500;cursor:pointer}
+  .langs button[aria-pressed="true"]{background:#fff;color:var(--maroon)}
+  .shortlist{background:var(--gold);color:#3A2806;border:0;border-radius:var(--r);padding:9px 14px;font-size:13.5px;font-weight:700;cursor:pointer;white-space:nowrap}
+  .shortlist[disabled]{opacity:.45;cursor:default}
+
+  /* ---------- hero ---------- */
+  .hero{background:#fff;border-bottom:1px solid var(--line);padding:26px 0 22px}
+  h1{font-family:var(--display);font-size:38px;font-weight:600;line-height:1.12;margin:0 0 8px}
+  .lede{margin:0;color:var(--ink-2);max-width:62ch}
+  .trust{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+  .trust li{list-style:none;background:var(--ok-bg);color:var(--ok);border-radius:99px;padding:6px 13px;font-size:13.5px;font-weight:500}
+
+  /* ---------- filters ---------- */
+  .filters{display:grid;grid-template-columns:1.6fr 1fr 1fr auto;gap:10px;margin:20px 0 14px}
+  .filters input,.filters select{width:100%;background:#fff;border:1px solid var(--line-2);border-radius:var(--r);padding:12px 13px}
+  .filters button{background:#fff;border:1px solid var(--line-2);border-radius:var(--r);padding:12px 18px;font-weight:500;cursor:pointer;white-space:nowrap}
+  .count{display:flex;align-items:baseline;gap:10px;margin-bottom:16px;color:var(--ink-3);font-size:14px}
+  .count b{color:var(--ink);font-size:17px}
+
+  /* ---------- cards ---------- */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px;padding-bottom:56px}
+  .card{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:0 var(--r) var(--r) 0;padding:18px;display:flex;flex-direction:column}
+  .card.t-RCC{border-left-color:#7A5C9E}
+  .card.t-Plaster{border-left-color:#1D9E75}
+  .card.t-Plumbing{border-left-color:#2E7CC4}
+  .card.t-Electrical{border-left-color:#C97A16}
+  .card.t-Tiling{border-left-color:#C1524A}
+  .site{font-size:13.5px;color:var(--ink-3);margin-bottom:2px}
+  .site b{color:var(--maroon);font-weight:700}
+  .addr{font-size:13.5px;color:var(--ink-3);margin-bottom:12px}
+  .card h2{font-size:20px;font-weight:700;line-height:1.25;margin:0 0 12px}
+  dl{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0 0 12px;font-size:15px;border-top:1px solid var(--line);padding-top:12px}
+  dt{color:var(--ink-3)}
+  dd{margin:0;font-weight:500}
+  .desc{font-size:14.5px;color:var(--ink-2);margin:0 0 12px}
+  .tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+  .tag{font-size:12.5px;font-weight:500;background:#F3EFE7;color:#5C5246;border-radius:6px;padding:4px 9px}
+  .actions{display:flex;gap:8px;margin-top:auto}
+  .btn{flex:1;border-radius:var(--r);padding:13px 12px;font-size:15px;font-weight:700;text-align:center;text-decoration:none;cursor:pointer;border:1px solid var(--maroon)}
+  .btn-primary{background:var(--maroon);color:#fff}
+  .btn-ghost{background:#fff;color:var(--maroon)}
+  .icon-btn{border:1px solid var(--line-2);background:#fff;border-radius:var(--r);width:46px;cursor:pointer;font-size:18px;line-height:1}
+
+  .state{text-align:center;padding:64px 20px;color:var(--ink-3)}
+  .state h2{font-family:var(--display);font-size:26px;color:var(--ink);margin:0 0 6px}
+
+  /* ---------- modal ---------- */
+  .overlay{position:fixed;inset:0;background:rgba(20,16,12,.55);display:flex;align-items:flex-end;justify-content:center;z-index:60;padding:0}
+  .overlay[hidden]{display:none}
+  .sheet{background:#fff;width:100%;max-width:560px;max-height:92vh;overflow-y:auto;border-radius:16px 16px 0 0;padding:22px}
+  .sheet h2{font-family:var(--display);font-size:27px;margin:0 0 4px}
+  .sheet .for{color:var(--ink-3);font-size:14.5px;margin:0 0 18px}
+  .field{margin-bottom:14px}
+  .field label{display:block;font-size:14px;font-weight:500;margin-bottom:5px}
+  .field .hint{font-weight:400;color:var(--ink-3)}
+  .field input,.field select,.field textarea{width:100%;border:1px solid var(--line-2);border-radius:var(--r);padding:13px}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .rate{display:grid;grid-template-columns:1fr 1.3fr;gap:8px}
+  .err{color:#A32D2D;font-size:13.5px;margin-top:5px}
+  .sheet-actions{display:flex;gap:10px;margin-top:20px}
+  .done{text-align:center;padding:30px 10px}
+  .done .tick{width:56px;height:56px;border-radius:50%;background:var(--ok-bg);color:var(--ok);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 14px}
+
+  footer{border-top:1px solid var(--line);background:#fff;padding:20px 0;font-size:13.5px;color:var(--ink-3)}
+
+  @media (max-width:760px){
+    h1{font-size:29px}
+    .filters{grid-template-columns:1fr 1fr}
+    .filters input,.filters button{grid-column:1/-1}
+    .mark{font-size:21px}
+    .grid{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body class="lang-en">
+
+<header>
+  <div class="wrap bar">
+    <div class="mark">Mangalam<span data-i18n="tagline">LANDMARKS</span></div>
+    <div class="spacer"></div>
+    <div class="langs" role="group" aria-label="Language">
+      <button data-lang="en" aria-pressed="true">EN</button>
+      <button data-lang="hi" aria-pressed="false">हिंदी</button>
+      <button data-lang="mr" aria-pressed="false">मराठी</button>
+    </div>
+    <button class="shortlist" id="shortlistBtn" disabled>
+      <span data-i18n="shortlist">Shortlist</span> <span id="shortlistCount">0</span>
+    </button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h1 data-i18n="title">Work available at our sites</h1>
+    <p class="lede" data-i18n="lede">Live requirements across Mangalam sites in Pune and PCMC. Tell us your rate and our site team will call you back.</p>
+    <ul class="trust">
+      <li data-i18n="t1">No registration fee</li>
+      <li data-i18n="t2">No login needed</li>
+      <li data-i18n="t3">Site team calls you directly</li>
+    </ul>
+  </div>
+</section>
+
+<main class="wrap">
+  <div class="filters">
+    <input id="q" type="search" data-i18n-ph="search" placeholder="Search site, trade or work">
+    <select id="fProject"><option value="" data-i18n="allProjects">All sites</option></select>
+    <select id="fTrade"><option value="" data-i18n="allTrades">All trades</option></select>
+    <button id="clear" data-i18n="clear">Clear</button>
+  </div>
+
+  <div class="count">
+    <b id="resultCount">—</b>
+    <span data-i18n="openWork">open requirements</span>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <div class="state" id="state" hidden>
+    <h2 id="stateTitle"></h2>
+    <p id="stateBody"></p>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap" data-i18n="footer">Mangalam Landmarks LLP, Pune. We never charge contractors or workers any fee to register or to be considered for work.</div>
+</footer>
+
+<!-- response sheet -->
+<div class="overlay" id="overlay" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+    <div id="formView">
+      <h2 id="sheetTitle" data-i18n="applyTitle">I can do this work</h2>
+      <p class="for" id="sheetFor"></p>
+
+      <div class="field">
+        <label for="fMobile" data-i18n="mobile">Mobile number</label>
+        <input id="fMobile" type="tel" inputmode="numeric" maxlength="10" placeholder="98XXXXXXXX">
+        <div class="err" id="eMobile" hidden></div>
+      </div>
+
+      <div class="field">
+        <label for="fName" data-i18n="yourName">Your name</label>
+        <input id="fName" type="text" autocomplete="name">
+        <div class="err" id="eName" hidden></div>
+      </div>
+
+      <div class="field">
+        <label for="fFirm" data-i18n="firm">Firm name <span class="hint" data-i18n="optional">(optional)</span></label>
+        <input id="fFirm" type="text">
+      </div>
+
+      <div class="field">
+        <label for="fRate" data-i18n="yourRate">Your rate</label>
+        <div class="rate">
+          <input id="fRate" type="number" inputmode="decimal" min="0" step="0.01" placeholder="₹">
+          <select id="fRateUnit"></select>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="fTeam" data-i18n="teamSize">How many workers</label>
+          <input id="fTeam" type="number" inputmode="numeric" min="1" max="500">
+        </div>
+        <div class="field">
+          <label for="fFrom" data-i18n="availableFrom">Can start from</label>
+          <input id="fFrom" type="date">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="fSite" data-i18n="currentSite">Where are you working now <span class="hint" data-i18n="optional">(optional)</span></label>
+        <input id="fSite" type="text">
+      </div>
+
+      <div class="field">
+        <label for="fRemarks" data-i18n="remarks">Anything else <span class="hint" data-i18n="optional">(optional)</span></label>
+        <textarea id="fRemarks" rows="2"></textarea>
+      </div>
+
+      <div class="err" id="eForm" hidden></div>
+
+      <div class="sheet-actions">
+        <button class="btn btn-ghost" id="cancelBtn" data-i18n="cancel">Cancel</button>
+        <button class="btn btn-primary" id="submitBtn" data-i18n="send">Send my details</button>
+      </div>
+    </div>
+
+    <div class="done" id="doneView" hidden>
+      <div class="tick">✓</div>
+      <h2 data-i18n="doneTitle">We have your details</h2>
+      <p id="doneBody" data-i18n="doneBody">Our site team will call you on this number. Keep your labour licence and ID ready.</p>
+      <div class="sheet-actions">
+        <button class="btn btn-primary" id="closeDone" data-i18n="close">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+// ─── config ────────────────────────────────────────────────
+const SUPABASE_URL  = 'https://YOUR-PROJECT.supabase.co';
+const SUPABASE_ANON = 'YOUR-ANON-KEY';
+const WHATSAPP_SITE = '919999999999';   // number used for the share message
+const db = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+// ─── copy ──────────────────────────────────────────────────
+const T = {
+  en:{tagline:'LANDMARKS',title:'Work available at our sites',lede:'Live requirements across Mangalam sites in Pune and PCMC. Tell us your rate and our site team will call you back.',t1:'No registration fee',t2:'No login needed',t3:'Site team calls you directly',search:'Search site, trade or work',allProjects:'All sites',allTrades:'All trades',clear:'Clear',openWork:'open requirements',shortlist:'Shortlist',workers:'Workers needed',starts:'Starts',duration:'Duration',quantum:'Quantity of work',months:'months',call:'Call site',apply:'I can do this',share:'Share',applyTitle:'I can do this work',mobile:'Mobile number',yourName:'Your name',firm:'Firm name',optional:'(optional)',yourRate:'Your rate',teamSize:'How many workers',availableFrom:'Can start from',currentSite:'Where are you working now',remarks:'Anything else',cancel:'Cancel',send:'Send my details',close:'Close',doneTitle:'We have your details',doneBody:'Our site team will call you on this number. Keep your labour licence and ID ready.',footer:'Mangalam Landmarks LLP, Pune. We never charge contractors or workers any fee to register or to be considered for work.',emptyT:'No work matches this filter',emptyB:'Clear the filters to see everything that is open.',failT:'Could not load the list',failB:'Check your connection and try again.',errMobile:'Enter a valid 10 digit mobile number',errName:'Enter your name',errSend:'Could not send. Please try again.',errClosed:'This requirement has just been filled.',errLimit:'Too many submissions today. Try again tomorrow.'},
+  hi:{tagline:'लैंडमार्क्स',title:'हमारी साइटों पर काम उपलब्ध है',lede:'पुणे और पिंपरी चिंचवड की मंगलम साइटों की मौजूदा ज़रूरतें। अपना रेट बताइए, साइट टीम आपको कॉल करेगी।',t1:'कोई रजिस्ट्रेशन फीस नहीं',t2:'लॉगिन की ज़रूरत नहीं',t3:'साइट टीम सीधे कॉल करेगी',search:'साइट, ट्रेड या काम खोजें',allProjects:'सभी साइटें',allTrades:'सभी ट्रेड',clear:'हटाएँ',openWork:'खुली ज़रूरतें',shortlist:'चुने हुए',workers:'कितने मज़दूर चाहिए',starts:'शुरू',duration:'अवधि',quantum:'काम की मात्रा',months:'महीने',call:'साइट पर कॉल करें',apply:'यह काम मैं कर सकता हूँ',share:'भेजें',applyTitle:'यह काम मैं कर सकता हूँ',mobile:'मोबाइल नंबर',yourName:'आपका नाम',firm:'फर्म का नाम',optional:'(वैकल्पिक)',yourRate:'आपका रेट',teamSize:'कितने मज़दूर हैं',availableFrom:'कब से शुरू कर सकते हैं',currentSite:'अभी कहाँ काम कर रहे हैं',remarks:'और कुछ',cancel:'रद्द करें',send:'मेरी जानकारी भेजें',close:'बंद करें',doneTitle:'आपकी जानकारी मिल गई',doneBody:'हमारी साइट टीम इसी नंबर पर कॉल करेगी। लेबर लाइसेंस और आईडी तैयार रखें।',footer:'मंगलम लैंडमार्क्स एलएलपी, पुणे। हम ठेकेदारों या मज़दूरों से कभी कोई फीस नहीं लेते।',emptyT:'इस फ़िल्टर में कोई काम नहीं',emptyB:'सब कुछ देखने के लिए फ़िल्टर हटाएँ।',failT:'सूची लोड नहीं हो सकी',failB:'कनेक्शन जाँचें और दोबारा कोशिश करें।',errMobile:'सही 10 अंकों का मोबाइल नंबर डालें',errName:'अपना नाम डालें',errSend:'भेजा नहीं जा सका। दोबारा कोशिश करें।',errClosed:'यह ज़रूरत अभी भर गई है।',errLimit:'आज बहुत बार भेजा गया। कल कोशिश करें।'},
+  mr:{tagline:'लँडमार्क्स',title:'आमच्या साइटवर काम उपलब्ध आहे',lede:'पुणे आणि पिंपरी चिंचवडमधील मंगलम साइटच्या सध्याच्या गरजा. तुमचा दर सांगा, साइट टीम तुम्हाला कॉल करेल.',t1:'नोंदणी फी नाही',t2:'लॉगिन लागत नाही',t3:'साइट टीम थेट कॉल करते',search:'साइट, ट्रेड किंवा काम शोधा',allProjects:'सर्व साइट',allTrades:'सर्व ट्रेड',clear:'काढा',openWork:'खुल्या गरजा',shortlist:'निवडलेले',workers:'किती कामगार हवेत',starts:'सुरुवात',duration:'कालावधी',quantum:'कामाचे प्रमाण',months:'महिने',call:'साइटला कॉल करा',apply:'हे काम मी करू शकतो',share:'पाठवा',applyTitle:'हे काम मी करू शकतो',mobile:'मोबाइल नंबर',yourName:'तुमचे नाव',firm:'फर्मचे नाव',optional:'(ऐच्छिक)',yourRate:'तुमचा दर',teamSize:'किती कामगार आहेत',availableFrom:'कधीपासून सुरू करू शकता',currentSite:'सध्या कुठे काम करत आहात',remarks:'आणखी काही',cancel:'रद्द करा',send:'माझी माहिती पाठवा',close:'बंद करा',doneTitle:'तुमची माहिती मिळाली',doneBody:'आमची साइट टीम याच नंबरवर कॉल करेल. लेबर लायसन्स आणि आयडी तयार ठेवा.',footer:'मंगलम लँडमार्क्स एलएलपी, पुणे. आम्ही कंत्राटदार किंवा कामगारांकडून कधीही फी घेत नाही.',emptyT:'या फिल्टरमध्ये काम नाही',emptyB:'सर्व पाहण्यासाठी फिल्टर काढा.',failT:'यादी लोड होऊ शकली नाही',failB:'कनेक्शन तपासा आणि पुन्हा प्रयत्न करा.',errMobile:'बरोबर 10 अंकी मोबाइल नंबर टाका',errName:'तुमचे नाव टाका',errSend:'पाठवता आले नाही. पुन्हा प्रयत्न करा.',errClosed:'ही गरज आत्ताच भरली आहे.',errLimit:'आज खूप वेळा पाठवले. उद्या प्रयत्न करा.'}
+};
+
+const UNITS = {
+  per_sft:{en:'per sft',hi:'प्रति sft',mr:'प्रति sft'},
+  per_cum:{en:'per cum',hi:'प्रति cum',mr:'प्रति cum'},
+  per_brass:{en:'per brass',hi:'प्रति ब्रास',mr:'प्रति ब्रास'},
+  per_rmt:{en:'per rmt',hi:'प्रति rmt',mr:'प्रति rmt'},
+  per_mt:{en:'per MT',hi:'प्रति MT',mr:'प्रति MT'},
+  per_flat:{en:'per flat',hi:'प्रति फ्लैट',mr:'प्रति फ्लॅट'},
+  per_day:{en:'per day',hi:'प्रति दिन',mr:'प्रति दिवस'},
+  lumpsum:{en:'lumpsum',hi:'एकमुश्त',mr:'एकरकमी'}
+};
+const BASIS = {
+  labour_rate:{en:'Labour rate basis',hi:'लेबर रेट बेसिस',mr:'लेबर रेट बेसिस'},
+  with_material:{en:'With material',hi:'मटेरियल सहित',mr:'मटेरियलसह'},
+  labour_plus_shuttering:{en:'Labour + shuttering',hi:'लेबर + शटरिंग',mr:'लेबर + शटरिंग'},
+  turnkey:{en:'Turnkey',hi:'टर्नकी',mr:'टर्नकी'}
+};
+
+// ─── state ─────────────────────────────────────────────────
+let lang = localStorage.getItem('ml_lang') || 'en';
+let rows = [];
+let shortlist = new Set();
+let active = null;
+const t = k => (T[lang][k] ?? T.en[k] ?? k);
+const el = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function localised(r, field){
+  return r[`${field}_${lang}`] || r[field] || '';
+}
+function fmtDate(d){
+  if(!d) return '—';
+  return new Date(d + 'T00:00:00').toLocaleDateString(
+    lang === 'en' ? 'en-IN' : (lang === 'hi' ? 'hi-IN' : 'mr-IN'),
+    {day:'numeric', month:'short', year:'numeric'}
+  );
+}
+
+// ─── language ──────────────────────────────────────────────
+function applyLang(){
+  document.body.className = 'lang-' + lang;
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-i18n]').forEach(n => n.textContent = t(n.dataset.i18n));
+  document.querySelectorAll('[data-i18n-ph]').forEach(n => n.placeholder = t(n.dataset.i18nPh));
+  document.querySelectorAll('.langs button').forEach(b =>
+    b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
+  el('fRateUnit').innerHTML = Object.entries(UNITS)
+    .map(([k,v]) => `<option value="${k}">${v[lang]}</option>`).join('');
+  render();
+}
+document.querySelectorAll('.langs button').forEach(b => b.onclick = () => {
+  lang = b.dataset.lang; localStorage.setItem('ml_lang', lang); applyLang();
+});
+
+// ─── load ──────────────────────────────────────────────────
+async function load(){
+  const { data, error } = await db.from('public_requirements').select('*');
+  if(error){ showState(t('failT'), t('failB')); return; }
+  rows = data || [];
+  buildFilters();
+  render();
+}
+
+function buildFilters(){
+  const fill = (sel, values, allKey) => {
+    const keep = sel.value;
+    sel.innerHTML = `<option value="">${t(allKey)}</option>` +
+      [...new Set(values)].sort().map(v => `<option>${esc(v)}</option>`).join('');
+    sel.value = keep;
+  };
+  fill(el('fProject'), rows.map(r => r.project_name), 'allProjects');
+  fill(el('fTrade'),   rows.map(r => r.trade),        'allTrades');
+}
+
+// ─── render ────────────────────────────────────────────────
+function filtered(){
+  const q = el('q').value.trim().toLowerCase();
+  const p = el('fProject').value, tr = el('fTrade').value;
+  return rows.filter(r => {
+    if(p && r.project_name !== p) return false;
+    if(tr && r.trade !== tr) return false;
+    if(!q) return true;
+    return [r.project_name, r.location, r.trade, r.building, localised(r,'work_title'), localised(r,'work_description')]
+      .join(' ').toLowerCase().includes(q);
+  });
+}
+
+function showState(title, body){
+  el('grid').innerHTML = '';
+  el('state').hidden = false;
+  el('stateTitle').textContent = title;
+  el('stateBody').textContent = body;
+}
+
+function render(){
+  const list = filtered();
+  el('resultCount').textContent = list.length;
+  el('shortlistCount').textContent = shortlist.size;
+  el('shortlistBtn').disabled = shortlist.size === 0;
+
+  if(!list.length){ showState(t('emptyT'), t('emptyB')); return; }
+  el('state').hidden = true;
+
+  el('grid').innerHTML = list.map(r => {
+    const unit = UNITS[r.rate_unit]?.[lang] || r.rate_unit;
+    const basis = BASIS[r.basis]?.[lang] || r.basis;
+    return `
+    <article class="card t-${esc(r.trade)}">
+      <div class="site"><b>${esc(r.project_name)}</b> · ${esc(r.city || '')}</div>
+      <div class="addr">${esc(r.location || '')}${r.building ? ' — ' + esc(r.building) : ''}</div>
+      <h2>${esc(localised(r,'work_title'))}</h2>
+      <dl>
+        <dt>${t('workers')}</dt><dd>${r.required_count ?? '—'}</dd>
+        <dt>${t('starts')}</dt><dd>${fmtDate(r.start_date)}</dd>
+        <dt>${t('duration')}</dt><dd>${r.duration_months ? r.duration_months + ' ' + t('months') : '—'}</dd>
+        ${r.work_quantum ? `<dt>${t('quantum')}</dt><dd>${esc(r.work_quantum)}</dd>` : ''}
+      </dl>
+      ${localised(r,'work_description') ? `<p class="desc">${esc(localised(r,'work_description'))}</p>` : ''}
+      <div class="tags"><span class="tag">${esc(basis)}</span><span class="tag">${esc(unit)}</span></div>
+      <div class="actions">
+        <button class="btn btn-primary" data-apply="${r.id}">${t('apply')}</button>
+        ${r.contact_mobile ? `<a class="btn btn-ghost" href="tel:${esc(r.contact_mobile)}">${t('call')}</a>` : ''}
+        <button class="icon-btn" data-share="${r.id}" aria-label="${t('share')}">↗</button>
+      </div>
+    </article>`;
+  }).join('');
+}
+
+el('grid').addEventListener('click', e => {
+  const a = e.target.closest('[data-apply]');
+  if(a){ openSheet(a.dataset.apply); return; }
+  const s = e.target.closest('[data-share]');
+  if(s) shareReq(s.dataset.share);
+});
+
+function shareReq(id){
+  const r = rows.find(x => x.id === id); if(!r) return;
+  const msg = `${localised(r,'work_title')}\n${r.project_name}, ${r.location || ''}\n` +
+              `${t('workers')}: ${r.required_count ?? '—'} · ${t('starts')}: ${fmtDate(r.start_date)}\n` +
+              `${location.origin}${location.pathname}`;
+  const url = `https://wa.me/?text=${encodeURIComponent(msg)}`;
+  if(navigator.share) navigator.share({text: msg}).catch(() => window.open(url,'_blank'));
+  else window.open(url, '_blank');
+}
+
+['q','fProject','fTrade'].forEach(id => el(id).addEventListener('input', render));
+el('clear').onclick = () => { el('q').value=''; el('fProject').value=''; el('fTrade').value=''; render(); };
+
+// ─── response sheet ────────────────────────────────────────
+function openSheet(id){
+  active = rows.find(r => r.id === id); if(!active) return;
+  el('sheetFor').textContent = `${localised(active,'work_title')} — ${active.project_name}`;
+  el('fRateUnit').value = active.rate_unit || 'per_sft';
+  el('fTeam').value = active.required_count ?? '';
+  el('formView').hidden = false;
+  el('doneView').hidden = true;
+  el('overlay').hidden = false;
+  ['eMobile','eName','eForm'].forEach(i => el(i).hidden = true);
+  el('fMobile').focus();
+}
+function closeSheet(){ el('overlay').hidden = true; active = null; }
+el('cancelBtn').onclick = closeSheet;
+el('closeDone').onclick = closeSheet;
+el('overlay').addEventListener('click', e => { if(e.target === el('overlay')) closeSheet(); });
+document.addEventListener('keydown', e => { if(e.key === 'Escape' && !el('overlay').hidden) closeSheet(); });
+
+['fMobile','fName'].forEach(id => el(id).addEventListener('input', () => {
+  el(id === 'fMobile' ? 'eMobile' : 'eName').hidden = true;
+}));
+
+el('submitBtn').onclick = async () => {
+  const mobile = el('fMobile').value.replace(/\D/g,'').slice(-10);
+  const name = el('fName').value.trim();
+  let bad = false;
+
+  if(!/^[6-9]\d{9}$/.test(mobile)){
+    el('eMobile').textContent = t('errMobile'); el('eMobile').hidden = false; bad = true;
+  }
+  if(!name){
+    el('eName').textContent = t('errName'); el('eName').hidden = false; bad = true;
+  }
+  if(bad) return;
+
+  const btn = el('submitBtn');
+  btn.disabled = true; btn.textContent = '…';
+  el('eForm').hidden = true;
+
+  const { error } = await db.rpc('submit_response', {
+    p_requirement_id: active.id,
+    p_mobile: mobile,
+    p_name: name,
+    p_firm_name: el('fFirm').value.trim() || null,
+    p_trade: active.trade,
+    p_team_size: el('fTeam').value ? Number(el('fTeam').value) : null,
+    p_current_site: el('fSite').value.trim() || null,
+    p_quoted_rate: el('fRate').value ? Number(el('fRate').value) : null,
+    p_rate_unit: el('fRateUnit').value,
+    p_available_from: el('fFrom').value || null,
+    p_remarks: el('fRemarks').value.trim() || null
+  });
+
+  btn.disabled = false; btn.textContent = t('send');
+
+  if(error){
+    const m = error.message || '';
+    el('eForm').textContent =
+      m.includes('REQUIREMENT_CLOSED') ? t('errClosed') :
+      m.includes('RATE_LIMIT')         ? t('errLimit')  :
+      m.includes('INVALID_MOBILE')     ? t('errMobile') : t('errSend');
+    el('eForm').hidden = false;
+    return;
+  }
+
+  shortlist.add(active.id);
+  el('formView').hidden = true;
+  el('doneView').hidden = false;
+  render();
+};
+
+applyLang();
+load();
+</script>
+</body>
+</html>
