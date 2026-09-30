@@ -82,13 +82,19 @@
   /* ---------- modal ---------- */
   .overlay{position:fixed;inset:0;background:rgba(20,16,12,.55);display:flex;align-items:flex-end;justify-content:center;z-index:60;padding:0}
   .overlay[hidden]{display:none}
-  .sheet{background:#fff;width:100%;max-width:560px;max-height:92vh;overflow-y:auto;border-radius:16px 16px 0 0;padding:22px}
+  .sheet{background:#fff;width:100%;max-width:600px;max-height:92vh;overflow-y:auto;border-radius:16px 16px 0 0;padding:22px}
   .sheet h2{font-family:var(--display);font-size:27px;margin:0 0 4px}
   .sheet .for{color:var(--ink-3);font-size:14.5px;margin:0 0 18px}
   .field{margin-bottom:14px}
   .field label{display:block;font-size:14px;font-weight:500;margin-bottom:5px}
   .field .hint{font-weight:400;color:var(--ink-3)}
+  .field .req{color:#A32D2D}
   .field input,.field select,.field textarea{width:100%;border:1px solid var(--line-2);border-radius:var(--r);padding:13px}
+  .phone{display:flex;border:1px solid var(--line-2);border-radius:var(--r);overflow:hidden;background:#fff}
+  .phone:focus-within{outline:2px solid var(--maroon);outline-offset:2px}
+  .phone span{display:flex;align-items:center;padding:0 12px;background:#F3EFE7;color:var(--ink-2);font-weight:500;border-right:1px solid var(--line-2)}
+  .field .phone input{border:0;border-radius:0;min-width:0}
+  .field .phone input:focus-visible{outline:none}
   .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   .rate{display:grid;grid-template-columns:1fr 1.3fr;gap:8px}
   .err{color:#A32D2D;font-size:13.5px;margin-top:5px}
@@ -104,6 +110,9 @@
     .filters input,.filters button{grid-column:1/-1}
     .mark{font-size:21px}
     .grid{grid-template-columns:1fr}
+  }
+  @media (max-width:480px){
+    .row{grid-template-columns:1fr;gap:0}
   }
 </style>
 </head>
@@ -168,25 +177,46 @@
       <h2 id="sheetTitle" data-i18n="applyTitle">I can do this work</h2>
       <p class="for" id="sheetFor"></p>
 
-      <div class="field">
-        <label for="fMobile" data-i18n="mobile">Mobile number</label>
-        <input id="fMobile" type="tel" inputmode="numeric" maxlength="10" placeholder="98XXXXXXXX">
-        <div class="err" id="eMobile" hidden></div>
+      <div class="row">
+        <div class="field">
+          <label for="fFirm"><span data-i18n="firmName">Firm / contractor name</span> <span class="req">*</span></label>
+          <input id="fFirm" type="text" autocomplete="organization">
+          <div class="err" id="eFirm" hidden></div>
+        </div>
+        <div class="field">
+          <label for="fName"><span data-i18n="contactPerson">Contact person</span> <span class="req">*</span></label>
+          <input id="fName" type="text" autocomplete="name">
+          <div class="err" id="eName" hidden></div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="fMobile"><span data-i18n="mobile">Mobile number</span> <span class="req">*</span></label>
+          <div class="phone"><span>+91</span><input id="fMobile" type="tel" inputmode="numeric" maxlength="10" placeholder="98XXXXXXXX" autocomplete="tel-national"></div>
+          <div class="err" id="eMobile" hidden></div>
+        </div>
+        <div class="field">
+          <label for="fAlt"><span data-i18n="altMobile">Alternative mobile</span> <span class="hint" data-i18n="optional">(optional)</span></label>
+          <div class="phone"><span>+91</span><input id="fAlt" type="tel" inputmode="numeric" maxlength="10"></div>
+          <div class="err" id="eAlt" hidden></div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="fEmail"><span data-i18n="email">Email</span> <span class="hint" data-i18n="optional">(optional)</span></label>
+          <input id="fEmail" type="email" inputmode="email" autocomplete="email">
+          <div class="err" id="eEmail" hidden></div>
+        </div>
+        <div class="field">
+          <label for="fTeam"><span data-i18n="teamSize">How many workers</span></label>
+          <input id="fTeam" type="number" inputmode="numeric" min="1" max="500">
+        </div>
       </div>
 
       <div class="field">
-        <label for="fName" data-i18n="yourName">Your name</label>
-        <input id="fName" type="text" autocomplete="name">
-        <div class="err" id="eName" hidden></div>
-      </div>
-
-      <div class="field">
-        <label for="fFirm" data-i18n="firm">Firm name <span class="hint" data-i18n="optional">(optional)</span></label>
-        <input id="fFirm" type="text">
-      </div>
-
-      <div class="field">
-        <label for="fRate" data-i18n="yourRate">Your rate</label>
+        <label for="fRate"><span data-i18n="yourRate">Your rate</span> <span class="hint" data-i18n="optional">(optional)</span></label>
         <div class="rate">
           <input id="fRate" type="number" inputmode="decimal" min="0" step="0.01" placeholder="₹">
           <select id="fRateUnit"></select>
@@ -195,22 +225,17 @@
 
       <div class="row">
         <div class="field">
-          <label for="fTeam" data-i18n="teamSize">How many workers</label>
-          <input id="fTeam" type="number" inputmode="numeric" min="1" max="500">
-        </div>
-        <div class="field">
-          <label for="fFrom" data-i18n="availableFrom">Can start from</label>
+          <label for="fFrom"><span data-i18n="availableFrom">Can start from</span></label>
           <input id="fFrom" type="date">
         </div>
+        <div class="field">
+          <label for="fSite"><span data-i18n="currentSite">Where are you working now</span> <span class="hint" data-i18n="optional">(optional)</span></label>
+          <input id="fSite" type="text">
+        </div>
       </div>
 
       <div class="field">
-        <label for="fSite" data-i18n="currentSite">Where are you working now <span class="hint" data-i18n="optional">(optional)</span></label>
-        <input id="fSite" type="text">
-      </div>
-
-      <div class="field">
-        <label for="fRemarks" data-i18n="remarks">Anything else <span class="hint" data-i18n="optional">(optional)</span></label>
+        <label for="fRemarks"><span data-i18n="remarks">Anything else</span> <span class="hint" data-i18n="optional">(optional)</span></label>
         <textarea id="fRemarks" rows="2"></textarea>
       </div>
 
@@ -244,9 +269,9 @@ const db = createClient(SUPABASE_URL, SUPABASE_ANON);
 
 // ─── copy ──────────────────────────────────────────────────
 const T = {
-  en:{tagline:'LANDMARKS',title:'Work available at our sites',lede:'Live requirements across Mangalam sites in Pune and PCMC. Tell us your rate and our site team will call you back.',t1:'No registration fee',t2:'No login needed',t3:'Site team calls you directly',search:'Search site, trade or work',allProjects:'All sites',allTrades:'All trades',clear:'Clear',openWork:'open requirements',shortlist:'Shortlist',workers:'Workers needed',starts:'Starts',duration:'Duration',quantum:'Quantity of work',months:'months',call:'Call site',apply:'I can do this',share:'Share',applyTitle:'I can do this work',mobile:'Mobile number',yourName:'Your name',firm:'Firm name',optional:'(optional)',yourRate:'Your rate',teamSize:'How many workers',availableFrom:'Can start from',currentSite:'Where are you working now',remarks:'Anything else',cancel:'Cancel',send:'Send my details',close:'Close',doneTitle:'We have your details',doneBody:'Our site team will call you on this number. Keep your labour licence and ID ready.',footer:'Mangalam Landmarks LLP, Pune. We never charge contractors or workers any fee to register or to be considered for work.',emptyT:'No work matches this filter',emptyB:'Clear the filters to see everything that is open.',failT:'Could not load the list',failB:'Check your connection and try again.',errMobile:'Enter a valid 10 digit mobile number',errName:'Enter your name',errSend:'Could not send. Please try again.',errClosed:'This requirement has just been filled.',errLimit:'Too many submissions today. Try again tomorrow.'},
-  hi:{tagline:'लैंडमार्क्स',title:'हमारी साइटों पर काम उपलब्ध है',lede:'पुणे और पिंपरी चिंचवड की मंगलम साइटों की मौजूदा ज़रूरतें। अपना रेट बताइए, साइट टीम आपको कॉल करेगी।',t1:'कोई रजिस्ट्रेशन फीस नहीं',t2:'लॉगिन की ज़रूरत नहीं',t3:'साइट टीम सीधे कॉल करेगी',search:'साइट, ट्रेड या काम खोजें',allProjects:'सभी साइटें',allTrades:'सभी ट्रेड',clear:'हटाएँ',openWork:'खुली ज़रूरतें',shortlist:'चुने हुए',workers:'कितने मज़दूर चाहिए',starts:'शुरू',duration:'अवधि',quantum:'काम की मात्रा',months:'महीने',call:'साइट पर कॉल करें',apply:'यह काम मैं कर सकता हूँ',share:'भेजें',applyTitle:'यह काम मैं कर सकता हूँ',mobile:'मोबाइल नंबर',yourName:'आपका नाम',firm:'फर्म का नाम',optional:'(वैकल्पिक)',yourRate:'आपका रेट',teamSize:'कितने मज़दूर हैं',availableFrom:'कब से शुरू कर सकते हैं',currentSite:'अभी कहाँ काम कर रहे हैं',remarks:'और कुछ',cancel:'रद्द करें',send:'मेरी जानकारी भेजें',close:'बंद करें',doneTitle:'आपकी जानकारी मिल गई',doneBody:'हमारी साइट टीम इसी नंबर पर कॉल करेगी। लेबर लाइसेंस और आईडी तैयार रखें।',footer:'मंगलम लैंडमार्क्स एलएलपी, पुणे। हम ठेकेदारों या मज़दूरों से कभी कोई फीस नहीं लेते।',emptyT:'इस फ़िल्टर में कोई काम नहीं',emptyB:'सब कुछ देखने के लिए फ़िल्टर हटाएँ।',failT:'सूची लोड नहीं हो सकी',failB:'कनेक्शन जाँचें और दोबारा कोशिश करें।',errMobile:'सही 10 अंकों का मोबाइल नंबर डालें',errName:'अपना नाम डालें',errSend:'भेजा नहीं जा सका। दोबारा कोशिश करें।',errClosed:'यह ज़रूरत अभी भर गई है।',errLimit:'आज बहुत बार भेजा गया। कल कोशिश करें।'},
-  mr:{tagline:'लँडमार्क्स',title:'आमच्या साइटवर काम उपलब्ध आहे',lede:'पुणे आणि पिंपरी चिंचवडमधील मंगलम साइटच्या सध्याच्या गरजा. तुमचा दर सांगा, साइट टीम तुम्हाला कॉल करेल.',t1:'नोंदणी फी नाही',t2:'लॉगिन लागत नाही',t3:'साइट टीम थेट कॉल करते',search:'साइट, ट्रेड किंवा काम शोधा',allProjects:'सर्व साइट',allTrades:'सर्व ट्रेड',clear:'काढा',openWork:'खुल्या गरजा',shortlist:'निवडलेले',workers:'किती कामगार हवेत',starts:'सुरुवात',duration:'कालावधी',quantum:'कामाचे प्रमाण',months:'महिने',call:'साइटला कॉल करा',apply:'हे काम मी करू शकतो',share:'पाठवा',applyTitle:'हे काम मी करू शकतो',mobile:'मोबाइल नंबर',yourName:'तुमचे नाव',firm:'फर्मचे नाव',optional:'(ऐच्छिक)',yourRate:'तुमचा दर',teamSize:'किती कामगार आहेत',availableFrom:'कधीपासून सुरू करू शकता',currentSite:'सध्या कुठे काम करत आहात',remarks:'आणखी काही',cancel:'रद्द करा',send:'माझी माहिती पाठवा',close:'बंद करा',doneTitle:'तुमची माहिती मिळाली',doneBody:'आमची साइट टीम याच नंबरवर कॉल करेल. लेबर लायसन्स आणि आयडी तयार ठेवा.',footer:'मंगलम लँडमार्क्स एलएलपी, पुणे. आम्ही कंत्राटदार किंवा कामगारांकडून कधीही फी घेत नाही.',emptyT:'या फिल्टरमध्ये काम नाही',emptyB:'सर्व पाहण्यासाठी फिल्टर काढा.',failT:'यादी लोड होऊ शकली नाही',failB:'कनेक्शन तपासा आणि पुन्हा प्रयत्न करा.',errMobile:'बरोबर 10 अंकी मोबाइल नंबर टाका',errName:'तुमचे नाव टाका',errSend:'पाठवता आले नाही. पुन्हा प्रयत्न करा.',errClosed:'ही गरज आत्ताच भरली आहे.',errLimit:'आज खूप वेळा पाठवले. उद्या प्रयत्न करा.'}
+  en:{tagline:'LANDMARKS',title:'Work available at our sites',lede:'Live requirements across Mangalam sites in Pune and PCMC. Tell us your rate and our site team will call you back.',t1:'No registration fee',t2:'No login needed',t3:'Site team calls you directly',search:'Search site, trade or work',allProjects:'All sites',allTrades:'All trades',clear:'Clear',openWork:'open requirements',shortlist:'Shortlist',workers:'Workers needed',starts:'Starts',duration:'Duration',quantum:'Quantity of work',months:'months',call:'Call site',apply:'I can do this',share:'Share',applyTitle:'I can do this work',firmName:'Firm / contractor name',contactPerson:'Contact person',mobile:'Mobile number',altMobile:'Alternative mobile',email:'Email',optional:'(optional)',yourRate:'Your rate',teamSize:'How many workers',availableFrom:'Can start from',currentSite:'Where are you working now',remarks:'Anything else',cancel:'Cancel',send:'Send my details',close:'Close',doneTitle:'We have your details',doneBody:'Our site team will call you on this number. Keep your labour licence and ID ready.',footer:'Mangalam Landmarks LLP, Pune. We never charge contractors or workers any fee to register or to be considered for work.',emptyT:'No work matches this filter',emptyB:'Clear the filters to see everything that is open.',failT:'Could not load the list',failB:'Check your connection and try again.',errMobile:'Enter a valid 10 digit mobile number',errAlt:'Enter a valid 10 digit number, or leave it blank',errName:'Enter the contact person\'s name',errFirm:'Enter your firm or contractor name',errEmail:'Enter a valid email, or leave it blank',errSend:'Could not send. Please try again.',errClosed:'This requirement has just been filled.',errLimit:'Too many submissions today. Try again tomorrow.'},
+  hi:{tagline:'लैंडमार्क्स',title:'हमारी साइटों पर काम उपलब्ध है',lede:'पुणे और पिंपरी चिंचवड की मंगलम साइटों की मौजूदा ज़रूरतें। अपना रेट बताइए, साइट टीम आपको कॉल करेगी।',t1:'कोई रजिस्ट्रेशन फीस नहीं',t2:'लॉगिन की ज़रूरत नहीं',t3:'साइट टीम सीधे कॉल करेगी',search:'साइट, ट्रेड या काम खोजें',allProjects:'सभी साइटें',allTrades:'सभी ट्रेड',clear:'हटाएँ',openWork:'खुली ज़रूरतें',shortlist:'चुने हुए',workers:'कितने मज़दूर चाहिए',starts:'शुरू',duration:'अवधि',quantum:'काम की मात्रा',months:'महीने',call:'साइट पर कॉल करें',apply:'यह काम मैं कर सकता हूँ',share:'भेजें',applyTitle:'यह काम मैं कर सकता हूँ',firmName:'फर्म / ठेकेदार का नाम',contactPerson:'संपर्क व्यक्ति',mobile:'मोबाइल नंबर',altMobile:'दूसरा मोबाइल नंबर',email:'ईमेल',optional:'(वैकल्पिक)',yourRate:'आपका रेट',teamSize:'कितने मज़दूर हैं',availableFrom:'कब से शुरू कर सकते हैं',currentSite:'अभी कहाँ काम कर रहे हैं',remarks:'और कुछ',cancel:'रद्द करें',send:'मेरी जानकारी भेजें',close:'बंद करें',doneTitle:'आपकी जानकारी मिल गई',doneBody:'हमारी साइट टीम इसी नंबर पर कॉल करेगी। लेबर लाइसेंस और आईडी तैयार रखें।',footer:'मंगलम लैंडमार्क्स एलएलपी, पुणे। हम ठेकेदारों या मज़दूरों से कभी कोई फीस नहीं लेते।',emptyT:'इस फ़िल्टर में कोई काम नहीं',emptyB:'सब कुछ देखने के लिए फ़िल्टर हटाएँ।',failT:'सूची लोड नहीं हो सकी',failB:'कनेक्शन जाँचें और दोबारा कोशिश करें।',errMobile:'सही 10 अंकों का मोबाइल नंबर डालें',errAlt:'सही 10 अंकों का नंबर डालें या खाली छोड़ें',errName:'संपर्क व्यक्ति का नाम डालें',errFirm:'फर्म या ठेकेदार का नाम डालें',errEmail:'सही ईमेल डालें या खाली छोड़ें',errSend:'भेजा नहीं जा सका। दोबारा कोशिश करें।',errClosed:'यह ज़रूरत अभी भर गई है।',errLimit:'आज बहुत बार भेजा गया। कल कोशिश करें।'},
+  mr:{tagline:'लँडमार्क्स',title:'आमच्या साइटवर काम उपलब्ध आहे',lede:'पुणे आणि पिंपरी चिंचवडमधील मंगलम साइटच्या सध्याच्या गरजा. तुमचा दर सांगा, साइट टीम तुम्हाला कॉल करेल.',t1:'नोंदणी फी नाही',t2:'लॉगिन लागत नाही',t3:'साइट टीम थेट कॉल करते',search:'साइट, ट्रेड किंवा काम शोधा',allProjects:'सर्व साइट',allTrades:'सर्व ट्रेड',clear:'काढा',openWork:'खुल्या गरजा',shortlist:'निवडलेले',workers:'किती कामगार हवेत',starts:'सुरुवात',duration:'कालावधी',quantum:'कामाचे प्रमाण',months:'महिने',call:'साइटला कॉल करा',apply:'हे काम मी करू शकतो',share:'पाठवा',applyTitle:'हे काम मी करू शकतो',firmName:'फर्म / कंत्राटदाराचे नाव',contactPerson:'संपर्क व्यक्ती',mobile:'मोबाइल नंबर',altMobile:'दुसरा मोबाइल नंबर',email:'ईमेल',optional:'(ऐच्छिक)',yourRate:'तुमचा दर',teamSize:'किती कामगार आहेत',availableFrom:'कधीपासून सुरू करू शकता',currentSite:'सध्या कुठे काम करत आहात',remarks:'आणखी काही',cancel:'रद्द करा',send:'माझी माहिती पाठवा',close:'बंद करा',doneTitle:'तुमची माहिती मिळाली',doneBody:'आमची साइट टीम याच नंबरवर कॉल करेल. लेबर लायसन्स आणि आयडी तयार ठेवा.',footer:'मंगलम लँडमार्क्स एलएलपी, पुणे. आम्ही कंत्राटदार किंवा कामगारांकडून कधीही फी घेत नाही.',emptyT:'या फिल्टरमध्ये काम नाही',emptyB:'सर्व पाहण्यासाठी फिल्टर काढा.',failT:'यादी लोड होऊ शकली नाही',failB:'कनेक्शन तपासा आणि पुन्हा प्रयत्न करा.',errMobile:'बरोबर 10 अंकी मोबाइल नंबर टाका',errAlt:'बरोबर 10 अंकी नंबर टाका किंवा रिकामे ठेवा',errName:'संपर्क व्यक्तीचे नाव टाका',errFirm:'फर्म किंवा कंत्राटदाराचे नाव टाका',errEmail:'बरोबर ईमेल टाका किंवा रिकामे ठेवा',errSend:'पाठवता आले नाही. पुन्हा प्रयत्न करा.',errClosed:'ही गरज आत्ताच भरली आहे.',errLimit:'आज खूप वेळा पाठवले. उद्या प्रयत्न करा.'}
 };
 
 const UNITS = {
@@ -397,6 +422,9 @@ function shareReq(id){
 el('clear').onclick = () => { el('q').value=''; el('fProject').value=''; el('fTrade').value=''; render(); };
 
 // ─── response sheet ────────────────────────────────────────
+// input id → its error box
+const ERR_FOR = { fFirm:'eFirm', fName:'eName', fMobile:'eMobile', fAlt:'eAlt', fEmail:'eEmail' };
+
 function openSheet(id){
   active = rows.find(r => r.id === id); if(!active) return;
   el('sheetFor').textContent = `${localised(active,'work_title')} — ${active.project_name}`;
@@ -405,8 +433,8 @@ function openSheet(id){
   el('formView').hidden = false;
   el('doneView').hidden = true;
   el('overlay').hidden = false;
-  ['eMobile','eName','eForm'].forEach(i => el(i).hidden = true);
-  el('fMobile').focus();
+  [...Object.values(ERR_FOR), 'eForm'].forEach(i => el(i).hidden = true);
+  el('fFirm').focus();
 }
 function closeSheet(){ el('overlay').hidden = true; active = null; }
 el('cancelBtn').onclick = closeSheet;
@@ -414,21 +442,28 @@ el('closeDone').onclick = closeSheet;
 el('overlay').addEventListener('click', e => { if(e.target === el('overlay')) closeSheet(); });
 document.addEventListener('keydown', e => { if(e.key === 'Escape' && !el('overlay').hidden) closeSheet(); });
 
-['fMobile','fName'].forEach(id => el(id).addEventListener('input', () => {
-  el(id === 'fMobile' ? 'eMobile' : 'eName').hidden = true;
-}));
+Object.entries(ERR_FOR).forEach(([field, err]) =>
+  el(field).addEventListener('input', () => { el(err).hidden = true; }));
 
 el('submitBtn').onclick = async () => {
-  const mobile = el('fMobile').value.replace(/\D/g,'').slice(-10);
-  const name = el('fName').value.trim();
-  let bad = false;
+  const digits = v => v.replace(/\D/g,'').slice(-10);
+  const isMobile = v => /^[6-9]\d{9}$/.test(v);
 
-  if(!/^[6-9]\d{9}$/.test(mobile)){
-    el('eMobile').textContent = t('errMobile'); el('eMobile').hidden = false; bad = true;
-  }
-  if(!name){
-    el('eName').textContent = t('errName'); el('eName').hidden = false; bad = true;
-  }
+  const firm   = el('fFirm').value.trim();
+  const name   = el('fName').value.trim();
+  const mobile = digits(el('fMobile').value);
+  const altRaw = el('fAlt').value.trim();
+  const alt    = digits(altRaw);
+  const email  = el('fEmail').value.trim();
+
+  let bad = false;
+  const fail = (box, key) => { el(box).textContent = t(key); el(box).hidden = false; bad = true; };
+
+  if(!firm) fail('eFirm', 'errFirm');
+  if(!name) fail('eName', 'errName');
+  if(!isMobile(mobile)) fail('eMobile', 'errMobile');
+  if(altRaw && !isMobile(alt)) fail('eAlt', 'errAlt');
+  if(email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) fail('eEmail', 'errEmail');
   if(bad) return;
 
   const btn = el('submitBtn');
@@ -439,7 +474,9 @@ el('submitBtn').onclick = async () => {
     p_requirement_id: active.id,
     p_mobile: mobile,
     p_name: name,
-    p_firm_name: el('fFirm').value.trim() || null,
+    p_firm_name: firm,
+    p_alt_mobile: altRaw ? alt : null,
+    p_email: email || null,
     p_trade: active.trade,
     p_team_size: el('fTeam').value ? Number(el('fTeam').value) : null,
     p_current_site: el('fSite').value.trim() || null,
@@ -456,7 +493,11 @@ el('submitBtn').onclick = async () => {
     el('eForm').textContent =
       m.includes('REQUIREMENT_CLOSED') ? t('errClosed') :
       m.includes('RATE_LIMIT')         ? t('errLimit')  :
-      m.includes('INVALID_MOBILE')     ? t('errMobile') : t('errSend');
+      m.includes('INVALID_ALT_MOBILE') ? t('errAlt')    :
+      m.includes('INVALID_MOBILE')     ? t('errMobile') :
+      m.includes('INVALID_EMAIL')      ? t('errEmail')  :
+      m.includes('FIRM_REQUIRED')      ? t('errFirm')   :
+      m.includes('NAME_REQUIRED')      ? t('errName')   : t('errSend');
     el('eForm').hidden = false;
     return;
   }
