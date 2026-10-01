@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Post requirements — Mangalam Landmarks</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --maroon:#8E1B1B; --gold:#C28D2C;
+    --ink:#1C1A18; --ink-2:#4A4642; --ink-3:#7A746D;
+    --page:#FAF8F4; --card:#FFFFFF; --line:#E4DED4; --line-2:#CFC7B9; --soft:#F3EFE7;
+    --ok:#1D6F4E; --ok-bg:#E8F3ED; --warn:#8A5A0B; --warn-bg:#FBF1DE; --bad:#A32D2D; --bad-bg:#FBEAEA;
+    --r:10px;
+    --sans:"DM Sans",system-ui,sans-serif;
+    --display:"Cormorant Garamond",Georgia,serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--page);color:var(--ink);font-family:var(--sans);font-size:15.5px;line-height:1.5;-webkit-font-smoothing:antialiased}
+  button,input,select,textarea{font:inherit;color:inherit}
+  :focus-visible{outline:2px solid var(--maroon);outline-offset:2px}
+  [hidden]{display:none !important}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+
+  header{background:var(--maroon);color:#fff;position:sticky;top:0;z-index:30}
+  .bar{display:flex;align-items:center;gap:12px;min-height:58px}
+  .mark{font-family:var(--display);font-size:24px;font-weight:600;line-height:1}
+  .mark small{display:block;font-family:var(--sans);font-size:11px;font-weight:500;opacity:.75;margin-top:3px}
+  .spacer{flex:1}
+  .who{font-size:13px;opacity:.8}
+  .hbtn{background:none;border:1px solid rgba(255,255,255,.4);color:#fff;border-radius:var(--r);padding:7px 12px;font-size:13px;cursor:pointer}
+
+  /* login */
+  .login{max-width:380px;margin:64px auto;background:#fff;border:1px solid var(--line);border-radius:14px;padding:26px}
+  .login h1{font-family:var(--display);font-size:30px;margin:0 0 4px}
+  .login p{color:var(--ink-3);margin:0 0 20px;font-size:14.5px}
+
+  /* tabs */
+  .tabs{display:flex;gap:6px;margin:22px 0 18px;border-bottom:1px solid var(--line)}
+  .tabs button{background:none;border:0;border-bottom:3px solid transparent;padding:10px 14px;font-weight:500;color:var(--ink-3);cursor:pointer;margin-bottom:-1px}
+  .tabs button[aria-selected="true"]{color:var(--maroon);border-bottom-color:var(--maroon)}
+
+  /* form */
+  .panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px;margin-bottom:40px}
+  .panel h2{font-family:var(--display);font-size:27px;margin:0 0 4px}
+  .panel .sub{color:var(--ink-3);margin:0 0 20px;font-size:14px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0 16px}
+  .full{grid-column:1/-1}
+  .field{margin-bottom:14px}
+  .field label{display:block;font-size:13.5px;font-weight:500;margin-bottom:5px}
+  .field .req{color:var(--bad)}
+  .field .hint{font-weight:400;color:var(--ink-3)}
+  .field input,.field select,.field textarea{width:100%;background:#fff;border:1px solid var(--line-2);border-radius:var(--r);padding:11px 12px}
+  .field textarea{resize:vertical}
+  .site-row{display:flex;gap:8px}
+  .site-row select{flex:1}
+  .linkbtn{background:none;border:0;color:var(--maroon);font-weight:500;cursor:pointer;padding:0 4px;white-space:nowrap;text-decoration:underline;text-underline-offset:3px}
+  .newsite{background:var(--soft);border-radius:var(--r);padding:14px;margin:-4px 0 14px}
+  details.lang{border:1px dashed var(--line-2);border-radius:var(--r);padding:12px 14px;margin:4px 0 16px}
+  details.lang summary{cursor:pointer;font-weight:500;font-size:14px}
+  details.lang[open] summary{margin-bottom:12px}
+  .check{display:flex;align-items:center;gap:10px;font-weight:500;margin:6px 0 4px}
+  .check input{width:18px;height:18px;accent-color:var(--maroon)}
+  .err{color:var(--bad);font-size:13.5px;margin-top:4px}
+  .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+  .btn{border-radius:var(--r);padding:12px 18px;font-weight:700;cursor:pointer;border:1px solid var(--maroon);background:#fff;color:var(--maroon)}
+  .btn-primary{background:var(--maroon);color:#fff}
+  .btn[disabled]{opacity:.55;cursor:default}
+  .btn-sm{padding:7px 11px;font-size:13.5px;font-weight:500;border-color:var(--line-2);color:var(--ink)}
+
+  /* list */
+  .filters{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px}
+  .filters select,.filters input{background:#fff;border:1px solid var(--line-2);border-radius:var(--r);padding:9px 11px}
+  .filters input{flex:1;min-width:180px}
+  .req-item{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:12px}
+  .req-top{display:flex;gap:12px;align-items:flex-start}
+  .req-main{flex:1;min-width:0}
+  .code{font-size:12.5px;color:var(--ink-3);font-weight:500}
+  .req-title{font-weight:700;font-size:17px;margin:2px 0 3px}
+  .req-meta{font-size:13.5px;color:var(--ink-2)}
+  .pill{display:inline-block;font-size:12.5px;font-weight:700;border-radius:99px;padding:3px 10px;white-space:nowrap}
+  .p-live{background:var(--ok-bg);color:var(--ok)}
+  .p-hidden{background:var(--soft);color:var(--ink-3)}
+  .p-filled{background:var(--warn-bg);color:var(--warn)}
+  .p-closed{background:var(--bad-bg);color:var(--bad)}
+  .req-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .resp{margin-top:14px;border-top:1px solid var(--line);padding-top:12px;overflow-x:auto}
+  table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:760px}
+  th{text-align:left;font-weight:500;color:var(--ink-3);padding:6px 8px;border-bottom:1px solid var(--line)}
+  td{padding:8px;border-bottom:1px solid var(--line);vertical-align:top}
+  td a{color:var(--maroon);font-weight:500}
+  td select{border:1px solid var(--line-2);border-radius:8px;padding:5px 6px;background:#fff}
+  .muted{color:var(--ink-3)}
+  .empty{text-align:center;color:var(--ink-3);padding:40px 10px}
+
+  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 18px;border-radius:var(--r);font-size:14.5px;z-index:50;max-width:92vw}
+
+  @media (max-width:720px){
+    .grid2,.grid3{grid-template-columns:1fr}
+    .who{display:none}
+    .req-top{flex-direction:column;gap:6px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <div class="mark">Mangalam<small>Contractor board · admin</small></div>
+    <div class="spacer"></div>
+    <span class="who" id="who"></span>
+    <button class="hbtn" id="logoutBtn" hidden>Log out</button>
+  </div>
+</header>
+
+<!-- ───────── login ───────── -->
+<section class="login" id="loginView" hidden>
+  <h1>Sign in</h1>
+  <p>Only Mangalam staff can post requirements.</p>
+  <div class="field"><label for="lEmail">Email</label><input id="lEmail" type="email" autocomplete="username"></div>
+  <div class="field"><label for="lPass">Password</label><input id="lPass" type="password" autocomplete="current-password"></div>
+  <div class="err" id="lErr" hidden></div>
+  <div class="actions"><button class="btn btn-primary" id="loginBtn" style="width:100%">Sign in</button></div>
+</section>
+
+<!-- ───────── app ───────── -->
+<main class="wrap" id="appView" hidden>
+  <div class="tabs" role="tablist">
+    <button role="tab" id="tabPost" aria-selected="true">Post requirement</button>
+    <button role="tab" id="tabList" aria-selected="false">All requirements <span id="reqCount"></span></button>
+  </div>
+
+  <!-- post / edit form -->
+  <section class="panel" id="postView">
+    <h2 id="formTitle">Post a new requirement</h2>
+    <p class="sub" id="formSub">Fields marked * are required. It goes live on the board as soon as you save.</p>
+
+    <div class="grid2">
+      <div class="field">
+        <label for="fSite">Site <span class="req">*</span></label>
+        <div class="site-row">
+          <select id="fSite"></select>
+          <button class="linkbtn" id="addSiteBtn" type="button">+ New site</button>
+        </div>
+      </div>
+      <div class="field">
+        <label for="fBuilding">Building / tower</label>
+        <input id="fBuilding" placeholder="e.g. B & C Building">
+      </div>
+    </div>
+
+    <div class="newsite" id="newSiteBox" hidden>
+      <div class="grid2">
+        <div class="field"><label for="nsName">Site name <span class="req">*</span></label><input id="nsName" placeholder="Mangalam ..."></div>
+        <div class="field"><label for="nsLoc">Location</label><input id="nsLoc" placeholder="e.g. Ravet, Pune"></div>
+      </div>
+      <div class="err" id="nsErr" hidden></div>
+      <div class="actions" style="margin-top:4px">
+        <button class="btn btn-sm" id="nsSave" type="button">Add site</button>
+        <button class="btn btn-sm" id="nsCancel" type="button">Cancel</button>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="field">
+        <label for="fTrade">Trade <span class="req">*</span></label>
+        <select id="fTrade"></select>
+      </div>
+      <div class="field">
+        <label for="fTitle">Work title <span class="req">*</span> <span class="hint">— shown in bold on the card</span></label>
+        <input id="fTitle" placeholder="e.g. Gypsum plaster work">
+      </div>
+      <div class="field full">
+        <label for="fDesc">Description</label>
+        <textarea id="fDesc" rows="2" placeholder="e.g. Gypsum plaster with material basis"></textarea>
+      </div>
+      <div class="field full">
+        <label for="fQuantum">Quantity of work</label>
+        <input id="fQuantum" placeholder="e.g. 60 flats, approx 1,80,000 sft">
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="field">
+        <label for="fBasis">Basis <span class="req">*</span></label>
+        <select id="fBasis"></select>
+      </div>
+      <div class="field">
+        <label for="fUnit">Rate unit <span class="req">*</span></label>
+        <select id="fUnit"></select>
+      </div>
+    </div>
+
+    <div class="grid3">
+      <div class="field">
+        <label for="fCount">Workers needed</label>
+        <input id="fCount" type="number" min="1" inputmode="numeric">
+      </div>
+      <div class="field">
+        <label for="fStart">Start date</label>
+        <input id="fStart" type="date">
+      </div>
+      <div class="field">
+        <label for="fMonths">Duration (months)</label>
+        <input id="fMonths" type="number" min="0" step="0.5" inputmode="decimal">
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="field">
+        <label for="fContact">Contact person</label>
+        <input id="fContact" placeholder="e.g. Site Engineer">
+      </div>
+      <div class="field">
+        <label for="fMobile">Contact mobile <span class="req">*</span> <span class="hint">— for the Call site button</span></label>
+        <input id="fMobile" type="tel" inputmode="numeric" maxlength="10" placeholder="98XXXXXXXX">
+      </div>
+    </div>
+
+    <details class="lang">
+      <summary>Hindi / Marathi text (optional — English shows if left blank)</summary>
+      <div class="grid2">
+        <div class="field"><label for="fTitleHi">Title in Hindi</label><input id="fTitleHi"></div>
+        <div class="field"><label for="fTitleMr">Title in Marathi</label><input id="fTitleMr"></div>
+        <div class="field"><label for="fDescHi">Description in Hindi</label><textarea id="fDescHi" rows="2"></textarea></div>
+        <div class="field"><label for="fDescMr">Description in Marathi</label><textarea id="fDescMr" rows="2"></textarea></div>
+      </div>
+    </details>
+
+    <label class="check"><input type="checkbox" id="fPublished" checked> Show on the board now</label>
+
+    <div class="err" id="fErr" hidden></div>
+
+    <div class="actions">
+      <button class="btn btn-primary" id="saveBtn">Save requirement</button>
+      <button class="btn" id="saveAnotherBtn">Save &amp; add another</button>
+      <button class="btn" id="cancelEditBtn" hidden>Cancel edit</button>
+    </div>
+  </section>
+
+  <!-- list -->
+  <section id="listView" hidden>
+    <div class="filters">
+      <input id="lq" type="search" placeholder="Search title, code, building">
+      <select id="lStatus">
+        <option value="open">Open</option>
+        <option value="filled">Filled</option>
+        <option value="closed">Closed</option>
+        <option value="">All</option>
+      </select>
+      <select id="lSite"></select>
+    </div>
+    <div id="list"></div>
+  </section>
+</main>
+
+<div class="toast" id="toast" hidden></div>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+// ─── config (same values as the public board) ─────────────
+const SUPABASE_URL  = 'https://xwkiacuprujheggyxldq.supabase.co';
+const SUPABASE_ANON = 'sb_publishable_pEdixshOAX-elMGPI1DBAw_bWZLnp5D';
+const db = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+// ─── lists ────────────────────────────────────────────────
+const TRADES = ['RCC','Masonry','Plaster','Plumbing','Electrical','Tiling','Painting','Waterproofing','Fabrication','Carpentry'];
+const BASIS = {labour_rate:'Labour rate basis', with_material:'With material', labour_plus_shuttering:'Labour + shuttering', turnkey:'Turnkey'};
+const UNITS = {per_sft:'per sft', per_cum:'per cum', per_brass:'per brass', per_rmt:'per rmt', per_mt:'per MT', per_flat:'per flat', per_day:'per day', lumpsum:'lumpsum'};
+const RESP_STATUS = ['new','contacted','shortlisted','awarded','rejected'];
+
+// ─── state & helpers ──────────────────────────────────────
+let projects = [], reqs = [], editingId = null, openResp = null;
+const el = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const opts = (obj, sel) => Object.entries(obj).map(([k,v]) => `<option value="${k}"${k===sel?' selected':''}>${esc(v)}</option>`).join('');
+const fmtDate = d => d ? new Date(d + 'T00:00:00').toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}) : '—';
+function toast(msg){
+  const t = el('toast'); t.textContent = msg; t.hidden = false;
+  clearTimeout(toast._t); toast._t = setTimeout(() => t.hidden = true, 3200);
+}
+function showErr(id, msg){ el(id).textContent = msg; el(id).hidden = !msg; }
+
+el('fTrade').innerHTML = TRADES.map(t => `<option>${t}</option>`).join('');
+el('fBasis').innerHTML = opts(BASIS, 'labour_rate');
+el('fUnit').innerHTML  = opts(UNITS, 'per_sft');
+
+// ─── auth ─────────────────────────────────────────────────
+async function boot(){
+  const { data:{ session } } = await db.auth.getSession();
+  session ? enterApp(session) : showLogin();
+}
+function showLogin(){
+  el('loginView').hidden = false; el('appView').hidden = true;
+  el('logoutBtn').hidden = true; el('who').textContent = '';
+}
+async function enterApp(session){
+  el('loginView').hidden = true; el('appView').hidden = false;
+  el('logoutBtn').hidden = false; el('who').textContent = session.user.email;
+  // remember last contact used, so the site engineer doesn't retype it
+  el('fContact').value = localStorage.getItem('adm_contact') || '';
+  el('fMobile').value  = localStorage.getItem('adm_mobile')  || '';
+  await Promise.all([loadProjects(), loadReqs()]);
+}
+el('loginBtn').onclick = async () => {
+  showErr('lErr','');
+  const btn = el('loginBtn'); btn.disabled = true; btn.textContent = 'Signing in…';
+  const { data, error } = await db.auth.signInWithPassword({ email: el('lEmail').value.trim(), password: el('lPass').value });
+  btn.disabled = false; btn.textContent = 'Sign in';
+  if(error){ showErr('lErr', 'Wrong email or password.'); return; }
+  enterApp(data.session);
+};
+el('lPass').addEventListener('keydown', e => { if(e.key === 'Enter') el('loginBtn').click(); });
+el('logoutBtn').onclick = async () => { await db.auth.signOut(); showLogin(); };
+
+// ─── data ─────────────────────────────────────────────────
+async function loadProjects(){
+  const { data, error } = await db.from('projects').select('id,name,location').order('name');
+  if(error){ toast('Could not load sites: ' + error.message); return; }
+  projects = data || [];
+  const keep = el('fSite').value;
+  el('fSite').innerHTML = `<option value="">Choose site</option>` +
+    projects.map(p => `<option value="${p.id}">${esc(p.name)}${p.location ? ' — ' + esc(p.location) : ''}</option>`).join('');
+  el('fSite').value = keep;
+  const keepL = el('lSite').value;
+  el('lSite').innerHTML = `<option value="">All sites</option>` + projects.map(p => `<option value="${p.id}">${esc(p.name)}</option>`).join('');
+  el('lSite').value = keepL;
+}
+async function loadReqs(){
+  const { data, error } = await db.from('requirements')
+    .select('*, projects(name), responses(count)')
+    .order('created_at', { ascending:false });
+  if(error){ toast('Could not load requirements: ' + error.message); return; }
+  reqs = data || [];
+  el('reqCount').textContent = `(${reqs.filter(r => r.status === 'open').length} open)`;
+  renderList();
+}
+function nextCode(){
+  const nums = reqs.map(r => /^REQ-(\d+)$/.exec(r.req_code || '')).filter(Boolean).map(m => +m[1]);
+  return 'REQ-' + String((nums.length ? Math.max(...nums) : 0) + 1).padStart(3,'0');
+}
+
+// ─── new site ─────────────────────────────────────────────
+el('addSiteBtn').onclick = () => { el('newSiteBox').hidden = false; el('nsName').focus(); };
+el('nsCancel').onclick = () => { el('newSiteBox').hidden = true; showErr('nsErr',''); };
+el('nsSave').onclick = async () => {
+  const name = el('nsName').value.trim();
+  if(!name){ showErr('nsErr','Enter the site name.'); return; }
+  const { data, error } = await db.from('projects')
+    .insert({ name, location: el('nsLoc').value.trim() || null, city:'Pune' }).select('id').single();
+  if(error){ showErr('nsErr', error.code === '23505' ? 'A site with this name already exists.' : error.message); return; }
+  await loadProjects();
+  el('fSite').value = data.id;
+  el('nsName').value = ''; el('nsLoc').value = '';
+  el('newSiteBox').hidden = true; showErr('nsErr','');
+  toast('Site added');
+};
+
+// ─── form ─────────────────────────────────────────────────
+const TEXT_FIELDS = { fBuilding:'building', fTitle:'work_title', fDesc:'work_description', fQuantum:'work_quantum',
+  fContact:'contact_name', fTitleHi:'work_title_hi', fTitleMr:'work_title_mr', fDescHi:'work_description_hi', fDescMr:'work_description_mr' };
+// cleared after "Save & add another"; site, basis, dates and contact stay
+const PER_JOB = ['fTitle','fDesc','fQuantum','fCount','fTitleHi','fTitleMr','fDescHi','fDescMr'];
+
+function readForm(){
+  const mobile = el('fMobile').value.replace(/\D/g,'').slice(-10);
+  if(!el('fSite').value) return { err:'Choose a site.' };
+  if(!el('fTitle').value.trim()) return { err:'Enter a work title.' };
+  if(!/^[6-9]\d{9}$/.test(mobile)) return { err:'Enter a valid 10 digit contact mobile.' };
+  const row = {
+    project_id: el('fSite').value,
+    trade: el('fTrade').value,
+    basis: el('fBasis').value,
+    rate_unit: el('fUnit').value,
+    required_count: el('fCount').value ? parseInt(el('fCount').value, 10) : null,
+    start_date: el('fStart').value || null,
+    duration_months: el('fMonths').value ? parseFloat(el('fMonths').value) : null,
+    contact_mobile: mobile,
+    published: el('fPublished').checked
+  };
+  for(const [id, col] of Object.entries(TEXT_FIELDS)) row[col] = el(id).value.trim() || null;
+  return { row };
+}
+
+function resetForm(keepShared){
+  const clear = keepShared ? PER_JOB : [...PER_JOB, 'fBuilding','fStart','fMonths'];
+  clear.forEach(id => el(id).value = '');
+  if(!keepShared){
+    el('fSite').value = ''; el('fTrade').selectedIndex = 0;
+    el('fBasis').value = 'labour_rate'; el('fUnit').value = 'per_sft';
+  }
+  el('fPublished').checked = true;
+  showErr('fErr','');
+}
+
+function setEditMode(r){
+  editingId = r ? r.id : null;
+  el('formTitle').textContent = r ? `Edit ${r.req_code}` : 'Post a new requirement';
+  el('formSub').textContent = r ? 'Change anything and save. The board updates straight away.' : 'Fields marked * are required. It goes live on the board as soon as you save.';
+  el('saveBtn').textContent = r ? 'Save changes' : 'Save requirement';
+  el('saveAnotherBtn').hidden = !!r;
+  el('cancelEditBtn').hidden = !r;
+}
+
+async function save(addAnother){
+  showErr('fErr','');
+  const { row, err } = readForm();
+  if(err){ showErr('fErr', err); return; }
+
+  [el('saveBtn'), el('saveAnotherBtn')].forEach(b => b.disabled = true);
+  let error, code;
+
+  if(editingId){
+    row.updated_at = new Date().toISOString();
+    ({ error } = await db.from('requirements').update(row).eq('id', editingId));
+    code = reqs.find(r => r.id === editingId)?.req_code;
+  } else {
+    for(let attempt = 0; attempt < 2; attempt++){
+      code = nextCode();
+      ({ error } = await db.from('requirements').insert({ ...row, req_code: code, status:'open' }));
+      if(error?.code === '23505'){ await loadReqs(); continue; }   // someone else took that code — try the next one
+      break;
+    }
+  }
+
+  [el('saveBtn'), el('saveAnotherBtn')].forEach(b => b.disabled = false);
+  if(error){ showErr('fErr', 'Could not save: ' + error.message); return; }
+
+  localStorage.setItem('adm_contact', row.contact_name || '');
+  localStorage.setItem('adm_mobile', row.contact_mobile);
+
+  const wasEdit = !!editingId;
+  toast(wasEdit ? `${code} updated` : `${code} saved${row.published ? ' — live on the board' : ' (hidden)'}`);
+  await loadReqs();
+
+  if(wasEdit){ setEditMode(null); resetForm(false); showTab('list'); }
+  else if(addAnother){ resetForm(true); el('fTitle').focus(); }
+  else { resetForm(false); showTab('list'); }
+}
+el('saveBtn').onclick = () => save(false);
+el('saveAnotherBtn').onclick = () => save(true);
+el('cancelEditBtn').onclick = () => { setEditMode(null); resetForm(false); showTab('list'); };
+
+function editReq(id){
+  const r = reqs.find(x => x.id === id); if(!r) return;
+  el('fSite').value = r.project_id;
+  el('fTrade').value = TRADES.includes(r.trade) ? r.trade : TRADES[0];
+  el('fBasis').value = r.basis; el('fUnit').value = r.rate_unit;
+  el('fCount').value = r.required_count ?? '';
+  el('fStart').value = r.start_date || '';
+  el('fMonths').value = r.duration_months ?? '';
+  el('fMobile').value = r.contact_mobile || '';
+  el('fPublished').checked = !!r.published;
+  for(const [fid, col] of Object.entries(TEXT_FIELDS)) el(fid).value = r[col] || '';
+  setEditMode(r);
+  showTab('post');
+  window.scrollTo({ top:0, behavior:'smooth' });
+}
+
+// ─── tabs ─────────────────────────────────────────────────
+function showTab(which){
+  const post = which === 'post';
+  el('postView').hidden = !post; el('listView').hidden = post;
+  el('tabPost').setAttribute('aria-selected', String(post));
+  el('tabList').setAttribute('aria-selected', String(!post));
+}
+el('tabPost').onclick = () => showTab('post');
+el('tabList').onclick = () => showTab('list');
+
+// ─── list ─────────────────────────────────────────────────
+function pill(r){
+  if(r.status === 'filled') return '<span class="pill p-filled">Filled</span>';
+  if(r.status === 'closed') return '<span class="pill p-closed">Closed</span>';
+  return r.published ? '<span class="pill p-live">Live on board</span>' : '<span class="pill p-hidden">Hidden</span>';
+}
+function renderList(){
+  const q = el('lq').value.trim().toLowerCase(), st = el('lStatus').value, site = el('lSite').value;
+  const list = reqs.filter(r =>
+    (!st || r.status === st) && (!site || r.project_id === site) &&
+    (!q || [r.req_code, r.work_title, r.building, r.trade].join(' ').toLowerCase().includes(q)));
+
+  if(!list.length){ el('list').innerHTML = `<div class="empty">Nothing here yet. Use "Post requirement" to add one.</div>`; return; }
+
+  el('list').innerHTML = list.map(r => {
+    const n = r.responses?.[0]?.count ?? 0;
+    return `
+    <article class="req-item">
+      <div class="req-top">
+        <div class="req-main">
+          <div class="code">${esc(r.req_code)} · ${esc(r.projects?.name)}${r.building ? ' · ' + esc(r.building) : ''}</div>
+          <div class="req-title">${esc(r.work_title)}</div>
+          <div class="req-meta">${esc(r.trade)} · ${r.required_count ?? '—'} workers · starts ${fmtDate(r.start_date)} · ${esc(BASIS[r.basis] || r.basis)}, ${esc(UNITS[r.rate_unit] || r.rate_unit)}</div>
+        </div>
+        ${pill(r)}
+      </div>
+      <div class="req-actions">
+        <button class="btn btn-sm" data-act="resp" data-id="${r.id}">${openResp === r.id ? 'Hide' : 'View'} responses (${n})</button>
+        <button class="btn btn-sm" data-act="edit" data-id="${r.id}">Edit</button>
+        ${r.status === 'open'
+          ? `<button class="btn btn-sm" data-act="pub" data-id="${r.id}">${r.published ? 'Hide from board' : 'Show on board'}</button>
+             <button class="btn btn-sm" data-act="filled" data-id="${r.id}">Mark filled</button>`
+          : `<button class="btn btn-sm" data-act="reopen" data-id="${r.id}">Reopen</button>`}
+      </div>
+      ${openResp === r.id ? `<div class="resp" id="resp-${r.id}"><span class="muted">Loading…</span></div>` : ''}
+    </article>`;
+  }).join('');
+
+  if(openResp && list.some(r => r.id === openResp)) loadResponses(openResp);
+}
+['lq','lStatus','lSite'].forEach(id => el(id).addEventListener('input', renderList));
+
+el('list').addEventListener('click', async e => {
+  const b = e.target.closest('[data-act]'); if(!b) return;
+  const id = b.dataset.id, r = reqs.find(x => x.id === id);
+  switch(b.dataset.act){
+    case 'edit':   editReq(id); break;
+    case 'resp':   openResp = openResp === id ? null : id; renderList(); break;
+    case 'pub':    await patchReq(id, { published: !r.published }, r.published ? 'Hidden from board' : 'Now live on board'); break;
+    case 'filled':
+      if(confirm(`Mark ${r.req_code} as filled? It will disappear from the public board.`))
+        await patchReq(id, { status:'filled' }, `${r.req_code} marked filled`);
+      break;
+    case 'reopen': await patchReq(id, { status:'open' }, `${r.req_code} reopened`); break;
+  }
+});
+async function patchReq(id, changes, msg){
+  const { error } = await db.from('requirements').update({ ...changes, updated_at: new Date().toISOString() }).eq('id', id);
+  if(error){ toast('Could not update: ' + error.message); return; }
+  toast(msg); await loadReqs();
+}
+
+// ─── responses ────────────────────────────────────────────
+async function loadResponses(reqId){
+  const box = el('resp-' + reqId); if(!box) return;
+  const { data, error } = await db.from('responses')
+    .select('id, quoted_rate, rate_unit, team_size_offered, available_from, remarks, status, created_at, contractors(name, firm_name, mobile, alt_mobile, email)')
+    .eq('requirement_id', reqId).order('created_at', { ascending:false });
+  if(error){ box.innerHTML = `<span class="err">${esc(error.message)}</span>`; return; }
+  if(!data.length){ box.innerHTML = '<span class="muted">No responses yet. Share the board link on WhatsApp groups to get some.</span>'; return; }
+  box.innerHTML = `<table>
+    <thead><tr><th>Firm</th><th>Contact</th><th>Mobile</th><th>Rate</th><th>Team</th><th>Can start</th><th>Remarks</th><th>Received</th><th>Status</th></tr></thead>
+    <tbody>${data.map(x => {
+      const c = x.contractors || {};
+      return `<tr>
+        <td><b>${esc(c.firm_name || '—')}</b></td>
+        <td>${esc(c.name)}${c.email ? `<div class="muted">${esc(c.email)}</div>` : ''}</td>
+        <td><a href="tel:${esc(c.mobile)}">${esc(c.mobile)}</a>${c.alt_mobile ? `<div><a href="tel:${esc(c.alt_mobile)}">${esc(c.alt_mobile)}</a></div>` : ''}</td>
+        <td>${x.quoted_rate != null ? '₹' + Number(x.quoted_rate).toLocaleString('en-IN') + ' ' + esc(UNITS[x.rate_unit] || x.rate_unit || '') : '—'}</td>
+        <td>${x.team_size_offered ?? '—'}</td>
+        <td>${fmtDate(x.available_from)}</td>
+        <td>${esc(x.remarks || '')}</td>
+        <td class="muted">${new Date(x.created_at).toLocaleDateString('en-IN',{day:'numeric',month:'short'})}</td>
+        <td><select data-resp="${x.id}">${RESP_STATUS.map(s => `<option${s === x.status ? ' selected' : ''}>${s}</option>`).join('')}</select></td>
+      </tr>`;
+    }).join('')}</tbody></table>`;
+}
+el('list').addEventListener('change', async e => {
+  const s = e.target.closest('select[data-resp]'); if(!s) return;
+  const { error } = await db.from('responses').update({ status: s.value }).eq('id', s.dataset.resp);
+  toast(error ? 'Could not update: ' + error.message : 'Status updated');
+});
+
+boot();
+</script>
+</body>
+</html>
