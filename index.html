@@ -54,12 +54,11 @@
 
   /* ---------- cards ---------- */
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px;padding-bottom:56px}
-  .card{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:0 var(--r) var(--r) 0;padding:18px;display:flex;flex-direction:column}
-  .card.t-RCC{border-left-color:#7A5C9E}
-  .card.t-Plaster{border-left-color:#1D9E75}
-  .card.t-Plumbing{border-left-color:#2E7CC4}
-  .card.t-Electrical{border-left-color:#C97A16}
-  .card.t-Tiling{border-left-color:#C1524A}
+  .card{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--tc,var(--gold));border-radius:0 var(--r) var(--r) 0;padding:18px;display:flex;flex-direction:column}
+  .card.shared{animation:pick 3.2s ease-out 1;box-shadow:0 0 0 3px var(--gold)}
+  @keyframes pick{0%,70%{box-shadow:0 0 0 5px var(--gold)}100%{box-shadow:0 0 0 0 transparent}}
+  @media (prefers-reduced-motion:reduce){.card.shared{animation:none}}
+  .notice{background:#FBF1DE;color:#6B4708;border:1px solid #EBD6A8;border-radius:var(--r);padding:12px 14px;margin:18px 0 0;font-size:14.5px}
   .site{font-size:13.5px;color:var(--ink-3);margin-bottom:2px}
   .site b{color:var(--maroon);font-weight:700}
   .addr{font-size:13.5px;color:var(--ink-3);margin-bottom:12px}
@@ -146,6 +145,7 @@
 </section>
 
 <main class="wrap">
+  <div class="notice" id="notice" hidden></div>
   <div class="filters">
     <input id="q" type="search" data-i18n-ph="search" placeholder="Search site, trade or work">
     <select id="fProject"><option value="" data-i18n="allProjects">All sites</option></select>
@@ -269,9 +269,9 @@ const db = createClient(SUPABASE_URL, SUPABASE_ANON);
 
 // ─── copy ──────────────────────────────────────────────────
 const T = {
-  en:{tagline:'LANDMARKS',title:'Work available at our sites',lede:'Live requirements across Mangalam sites in Pune and PCMC. Tell us your rate and our site team will call you back.',t1:'No registration fee',t2:'No login needed',t3:'Site team calls you directly',search:'Search site, trade or work',allProjects:'All sites',allTrades:'All trades',clear:'Clear',openWork:'open requirements',shortlist:'Shortlist',workers:'Workers needed',starts:'Starts',duration:'Duration',quantum:'Quantity of work',months:'months',call:'Call site',apply:'I can do this',share:'Share',applyTitle:'I can do this work',firmName:'Firm / contractor name',contactPerson:'Contact person',mobile:'Mobile number',altMobile:'Alternative mobile',email:'Email',optional:'(optional)',yourRate:'Your rate',teamSize:'How many workers',availableFrom:'Can start from',currentSite:'Where are you working now',remarks:'Anything else',cancel:'Cancel',send:'Send my details',close:'Close',doneTitle:'We have your details',doneBody:'Our site team will call you on this number. Keep your labour licence and ID ready.',footer:'Mangalam Landmarks LLP, Pune. We never charge contractors or workers any fee to register or to be considered for work.',emptyT:'No work matches this filter',emptyB:'Clear the filters to see everything that is open.',failT:'Could not load the list',failB:'Check your connection and try again.',errMobile:'Enter a valid 10 digit mobile number',errAlt:'Enter a valid 10 digit number, or leave it blank',errName:'Enter the contact person\'s name',errFirm:'Enter your firm or contractor name',errEmail:'Enter a valid email, or leave it blank',errSend:'Could not send. Please try again.',errClosed:'This requirement has just been filled.',errLimit:'Too many submissions today. Try again tomorrow.'},
-  hi:{tagline:'लैंडमार्क्स',title:'हमारी साइटों पर काम उपलब्ध है',lede:'पुणे और पिंपरी चिंचवड की मंगलम साइटों की मौजूदा ज़रूरतें। अपना रेट बताइए, साइट टीम आपको कॉल करेगी।',t1:'कोई रजिस्ट्रेशन फीस नहीं',t2:'लॉगिन की ज़रूरत नहीं',t3:'साइट टीम सीधे कॉल करेगी',search:'साइट, ट्रेड या काम खोजें',allProjects:'सभी साइटें',allTrades:'सभी ट्रेड',clear:'हटाएँ',openWork:'खुली ज़रूरतें',shortlist:'चुने हुए',workers:'कितने मज़दूर चाहिए',starts:'शुरू',duration:'अवधि',quantum:'काम की मात्रा',months:'महीने',call:'साइट पर कॉल करें',apply:'यह काम मैं कर सकता हूँ',share:'भेजें',applyTitle:'यह काम मैं कर सकता हूँ',firmName:'फर्म / ठेकेदार का नाम',contactPerson:'संपर्क व्यक्ति',mobile:'मोबाइल नंबर',altMobile:'दूसरा मोबाइल नंबर',email:'ईमेल',optional:'(वैकल्पिक)',yourRate:'आपका रेट',teamSize:'कितने मज़दूर हैं',availableFrom:'कब से शुरू कर सकते हैं',currentSite:'अभी कहाँ काम कर रहे हैं',remarks:'और कुछ',cancel:'रद्द करें',send:'मेरी जानकारी भेजें',close:'बंद करें',doneTitle:'आपकी जानकारी मिल गई',doneBody:'हमारी साइट टीम इसी नंबर पर कॉल करेगी। लेबर लाइसेंस और आईडी तैयार रखें।',footer:'मंगलम लैंडमार्क्स एलएलपी, पुणे। हम ठेकेदारों या मज़दूरों से कभी कोई फीस नहीं लेते।',emptyT:'इस फ़िल्टर में कोई काम नहीं',emptyB:'सब कुछ देखने के लिए फ़िल्टर हटाएँ।',failT:'सूची लोड नहीं हो सकी',failB:'कनेक्शन जाँचें और दोबारा कोशिश करें।',errMobile:'सही 10 अंकों का मोबाइल नंबर डालें',errAlt:'सही 10 अंकों का नंबर डालें या खाली छोड़ें',errName:'संपर्क व्यक्ति का नाम डालें',errFirm:'फर्म या ठेकेदार का नाम डालें',errEmail:'सही ईमेल डालें या खाली छोड़ें',errSend:'भेजा नहीं जा सका। दोबारा कोशिश करें।',errClosed:'यह ज़रूरत अभी भर गई है।',errLimit:'आज बहुत बार भेजा गया। कल कोशिश करें।'},
-  mr:{tagline:'लँडमार्क्स',title:'आमच्या साइटवर काम उपलब्ध आहे',lede:'पुणे आणि पिंपरी चिंचवडमधील मंगलम साइटच्या सध्याच्या गरजा. तुमचा दर सांगा, साइट टीम तुम्हाला कॉल करेल.',t1:'नोंदणी फी नाही',t2:'लॉगिन लागत नाही',t3:'साइट टीम थेट कॉल करते',search:'साइट, ट्रेड किंवा काम शोधा',allProjects:'सर्व साइट',allTrades:'सर्व ट्रेड',clear:'काढा',openWork:'खुल्या गरजा',shortlist:'निवडलेले',workers:'किती कामगार हवेत',starts:'सुरुवात',duration:'कालावधी',quantum:'कामाचे प्रमाण',months:'महिने',call:'साइटला कॉल करा',apply:'हे काम मी करू शकतो',share:'पाठवा',applyTitle:'हे काम मी करू शकतो',firmName:'फर्म / कंत्राटदाराचे नाव',contactPerson:'संपर्क व्यक्ती',mobile:'मोबाइल नंबर',altMobile:'दुसरा मोबाइल नंबर',email:'ईमेल',optional:'(ऐच्छिक)',yourRate:'तुमचा दर',teamSize:'किती कामगार आहेत',availableFrom:'कधीपासून सुरू करू शकता',currentSite:'सध्या कुठे काम करत आहात',remarks:'आणखी काही',cancel:'रद्द करा',send:'माझी माहिती पाठवा',close:'बंद करा',doneTitle:'तुमची माहिती मिळाली',doneBody:'आमची साइट टीम याच नंबरवर कॉल करेल. लेबर लायसन्स आणि आयडी तयार ठेवा.',footer:'मंगलम लँडमार्क्स एलएलपी, पुणे. आम्ही कंत्राटदार किंवा कामगारांकडून कधीही फी घेत नाही.',emptyT:'या फिल्टरमध्ये काम नाही',emptyB:'सर्व पाहण्यासाठी फिल्टर काढा.',failT:'यादी लोड होऊ शकली नाही',failB:'कनेक्शन तपासा आणि पुन्हा प्रयत्न करा.',errMobile:'बरोबर 10 अंकी मोबाइल नंबर टाका',errAlt:'बरोबर 10 अंकी नंबर टाका किंवा रिकामे ठेवा',errName:'संपर्क व्यक्तीचे नाव टाका',errFirm:'फर्म किंवा कंत्राटदाराचे नाव टाका',errEmail:'बरोबर ईमेल टाका किंवा रिकामे ठेवा',errSend:'पाठवता आले नाही. पुन्हा प्रयत्न करा.',errClosed:'ही गरज आत्ताच भरली आहे.',errLimit:'आज खूप वेळा पाठवले. उद्या प्रयत्न करा.'}
+  en:{tagline:'LANDMARKS',title:'Work available at our sites',lede:'Live requirements across Mangalam sites in Pune and PCMC. Tell us your rate and our site team will call you back.',t1:'No registration fee',t2:'No login needed',t3:'Site team calls you directly',search:'Search site, trade or work',allProjects:'All sites',allTrades:'All trades',clear:'Clear',openWork:'open requirements',shortlist:'Shortlist',workers:'Workers needed',starts:'Starts',duration:'Duration',quantum:'Quantity of work',months:'months',call:'Call site',apply:'I can do this',share:'Share',applyTitle:'I can do this work',firmName:'Firm / contractor name',contactPerson:'Contact person',mobile:'Mobile number',altMobile:'Alternative mobile',email:'Email',optional:'(optional)',yourRate:'Your rate',teamSize:'How many workers',availableFrom:'Can start from',currentSite:'Where are you working now',remarks:'Anything else',cancel:'Cancel',send:'Send my details',close:'Close',doneTitle:'We have your details',doneBody:'Our site team will call you on this number. Keep your labour licence and ID ready.',footer:'Mangalam Landmarks LLP, Pune. We never charge contractors or workers any fee to register or to be considered for work.',emptyT:'No work matches this filter',emptyB:'Clear the filters to see everything that is open.',failT:'Could not load the list',failB:'Check your connection and try again.',errMobile:'Enter a valid 10 digit mobile number',errAlt:'Enter a valid 10 digit number, or leave it blank',errName:'Enter the contact person\'s name',errFirm:'Enter your firm or contractor name',errEmail:'Enter a valid email, or leave it blank',errSend:'Could not send. Please try again.',errClosed:'This requirement has just been filled.',errLimit:'Too many submissions today. Try again tomorrow.',gone:'That requirement is no longer open. Here is everything that is open now.',shareCta:'Quote your rate. No fee, no login.'},
+  hi:{tagline:'लैंडमार्क्स',title:'हमारी साइटों पर काम उपलब्ध है',lede:'पुणे और पिंपरी चिंचवड की मंगलम साइटों की मौजूदा ज़रूरतें। अपना रेट बताइए, साइट टीम आपको कॉल करेगी।',t1:'कोई रजिस्ट्रेशन फीस नहीं',t2:'लॉगिन की ज़रूरत नहीं',t3:'साइट टीम सीधे कॉल करेगी',search:'साइट, ट्रेड या काम खोजें',allProjects:'सभी साइटें',allTrades:'सभी ट्रेड',clear:'हटाएँ',openWork:'खुली ज़रूरतें',shortlist:'चुने हुए',workers:'कितने मज़दूर चाहिए',starts:'शुरू',duration:'अवधि',quantum:'काम की मात्रा',months:'महीने',call:'साइट पर कॉल करें',apply:'यह काम मैं कर सकता हूँ',share:'भेजें',applyTitle:'यह काम मैं कर सकता हूँ',firmName:'फर्म / ठेकेदार का नाम',contactPerson:'संपर्क व्यक्ति',mobile:'मोबाइल नंबर',altMobile:'दूसरा मोबाइल नंबर',email:'ईमेल',optional:'(वैकल्पिक)',yourRate:'आपका रेट',teamSize:'कितने मज़दूर हैं',availableFrom:'कब से शुरू कर सकते हैं',currentSite:'अभी कहाँ काम कर रहे हैं',remarks:'और कुछ',cancel:'रद्द करें',send:'मेरी जानकारी भेजें',close:'बंद करें',doneTitle:'आपकी जानकारी मिल गई',doneBody:'हमारी साइट टीम इसी नंबर पर कॉल करेगी। लेबर लाइसेंस और आईडी तैयार रखें।',footer:'मंगलम लैंडमार्क्स एलएलपी, पुणे। हम ठेकेदारों या मज़दूरों से कभी कोई फीस नहीं लेते।',emptyT:'इस फ़िल्टर में कोई काम नहीं',emptyB:'सब कुछ देखने के लिए फ़िल्टर हटाएँ।',failT:'सूची लोड नहीं हो सकी',failB:'कनेक्शन जाँचें और दोबारा कोशिश करें।',errMobile:'सही 10 अंकों का मोबाइल नंबर डालें',errAlt:'सही 10 अंकों का नंबर डालें या खाली छोड़ें',errName:'संपर्क व्यक्ति का नाम डालें',errFirm:'फर्म या ठेकेदार का नाम डालें',errEmail:'सही ईमेल डालें या खाली छोड़ें',errSend:'भेजा नहीं जा सका। दोबारा कोशिश करें।',errClosed:'यह ज़रूरत अभी भर गई है।',errLimit:'आज बहुत बार भेजा गया। कल कोशिश करें।',gone:'यह ज़रूरत अब खुली नहीं है। अभी जो खुली हैं, वे नीचे हैं।',shareCta:'अपना रेट बताइए। कोई फीस नहीं, लॉगिन नहीं।'},
+  mr:{tagline:'लँडमार्क्स',title:'आमच्या साइटवर काम उपलब्ध आहे',lede:'पुणे आणि पिंपरी चिंचवडमधील मंगलम साइटच्या सध्याच्या गरजा. तुमचा दर सांगा, साइट टीम तुम्हाला कॉल करेल.',t1:'नोंदणी फी नाही',t2:'लॉगिन लागत नाही',t3:'साइट टीम थेट कॉल करते',search:'साइट, ट्रेड किंवा काम शोधा',allProjects:'सर्व साइट',allTrades:'सर्व ट्रेड',clear:'काढा',openWork:'खुल्या गरजा',shortlist:'निवडलेले',workers:'किती कामगार हवेत',starts:'सुरुवात',duration:'कालावधी',quantum:'कामाचे प्रमाण',months:'महिने',call:'साइटला कॉल करा',apply:'हे काम मी करू शकतो',share:'पाठवा',applyTitle:'हे काम मी करू शकतो',firmName:'फर्म / कंत्राटदाराचे नाव',contactPerson:'संपर्क व्यक्ती',mobile:'मोबाइल नंबर',altMobile:'दुसरा मोबाइल नंबर',email:'ईमेल',optional:'(ऐच्छिक)',yourRate:'तुमचा दर',teamSize:'किती कामगार आहेत',availableFrom:'कधीपासून सुरू करू शकता',currentSite:'सध्या कुठे काम करत आहात',remarks:'आणखी काही',cancel:'रद्द करा',send:'माझी माहिती पाठवा',close:'बंद करा',doneTitle:'तुमची माहिती मिळाली',doneBody:'आमची साइट टीम याच नंबरवर कॉल करेल. लेबर लायसन्स आणि आयडी तयार ठेवा.',footer:'मंगलम लँडमार्क्स एलएलपी, पुणे. आम्ही कंत्राटदार किंवा कामगारांकडून कधीही फी घेत नाही.',emptyT:'या फिल्टरमध्ये काम नाही',emptyB:'सर्व पाहण्यासाठी फिल्टर काढा.',failT:'यादी लोड होऊ शकली नाही',failB:'कनेक्शन तपासा आणि पुन्हा प्रयत्न करा.',errMobile:'बरोबर 10 अंकी मोबाइल नंबर टाका',errAlt:'बरोबर 10 अंकी नंबर टाका किंवा रिकामे ठेवा',errName:'संपर्क व्यक्तीचे नाव टाका',errFirm:'फर्म किंवा कंत्राटदाराचे नाव टाका',errEmail:'बरोबर ईमेल टाका किंवा रिकामे ठेवा',errSend:'पाठवता आले नाही. पुन्हा प्रयत्न करा.',errClosed:'ही गरज आत्ताच भरली आहे.',errLimit:'आज खूप वेळा पाठवले. उद्या प्रयत्न करा.',gone:'ही गरज आता खुली नाही. सध्या खुल्या असलेल्या खाली आहेत.',shareCta:'तुमचा दर सांगा. फी नाही, लॉगिन नाही.'}
 };
 
 const UNITS = {
@@ -290,6 +290,11 @@ const BASIS = {
   labour_plus_shuttering:{en:'Labour + shuttering',hi:'लेबर + शटरिंग',mr:'लेबर + शटरिंग'},
   turnkey:{en:'Turnkey',hi:'टर्नकी',mr:'टर्नकी'}
 };
+
+// colours used if the shared trade list cannot be loaded
+const TRADE_COLORS = { RCC:'#7A5C9E', Plaster:'#1D9E75', Plumbing:'#2E7CC4', Electrical:'#C97A16', Tiling:'#C1524A',
+  Masonry:'#8A6D4B', Painting:'#D4688A', Waterproofing:'#2A9AA8', Fabrication:'#5B6670', Carpentry:'#A0652D' };
+const colorOf = name => TRADE_COLORS[name] || '#C28D2C';
 
 // ─── state ─────────────────────────────────────────────────
 let lang = localStorage.getItem('ml_lang') || 'en';
@@ -329,11 +334,29 @@ document.querySelectorAll('.langs button').forEach(b => b.onclick = () => {
 
 // ─── load ──────────────────────────────────────────────────
 async function load(){
-  const { data, error } = await db.from('public_requirements').select('*');
-  if(error){ showState(t('failT'), t('failB')); return; }
-  rows = data || [];
+  const [reqRes, tradeRes] = await Promise.all([
+    db.from('public_requirements').select('*'),
+    db.from('trades').select('name,color')
+  ]);
+  // trades added by the site team show up here with their own colour
+  (tradeRes.data || []).forEach(x => { TRADE_COLORS[x.name] = x.color; });
+  if(reqRes.error){ showState(t('failT'), t('failB')); return; }
+  rows = reqRes.data || [];
   buildFilters();
   render();
+  openShared();
+}
+
+// a shared link looks like /?r=<id>: scroll to that card and flash it
+let sharedHandled = false;
+function openShared(){
+  if(sharedHandled) return; sharedHandled = true;
+  const id = new URLSearchParams(location.search).get('r');
+  if(!id) return;
+  const card = document.getElementById('req-' + id);
+  if(!card){ el('notice').textContent = t('gone'); el('notice').hidden = false; return; }
+  card.scrollIntoView({ behavior:'smooth', block:'center' });
+  card.classList.add('shared');
 }
 
 function buildFilters(){
@@ -380,7 +403,7 @@ function render(){
     const unit = UNITS[r.rate_unit]?.[lang] || r.rate_unit;
     const basis = BASIS[r.basis]?.[lang] || r.basis;
     return `
-    <article class="card t-${esc(r.trade)}">
+    <article class="card" id="req-${esc(r.id)}" style="--tc:${esc(colorOf(r.trade))}">
       <div class="site"><b>${esc(r.project_name)}</b> · ${esc(r.city || '')}</div>
       <div class="addr">${esc(r.location || '')}${r.building ? ' — ' + esc(r.building) : ''}</div>
       <h2>${esc(localised(r,'work_title'))}</h2>
@@ -410,11 +433,12 @@ el('grid').addEventListener('click', e => {
 
 function shareReq(id){
   const r = rows.find(x => x.id === id); if(!r) return;
-  const msg = `${localised(r,'work_title')}\n${r.project_name}, ${r.location || ''}\n` +
-              `${t('workers')}: ${r.required_count ?? '—'} · ${t('starts')}: ${fmtDate(r.start_date)}\n` +
-              `${location.origin}${location.pathname}`;
+  // this link is read by WhatsApp, which turns it into a picture card with the work details
+  const link = `${location.origin}/api/r/${r.id}`;
+  const msg = `${r.trade} · ${r.project_name}\n${localised(r,'work_title')}\n${t('shareCta')}\n${link}`;
   const url = `https://wa.me/?text=${encodeURIComponent(msg)}`;
-  if(navigator.share) navigator.share({text: msg}).catch(() => window.open(url,'_blank'));
+  const phone = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  if(phone && navigator.share) navigator.share({ text: msg }).catch(() => window.open(url, '_blank'));
   else window.open(url, '_blank');
 }
 
