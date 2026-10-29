@@ -73,6 +73,17 @@
   .btn[disabled]{opacity:.55;cursor:default}
   .btn-sm{padding:7px 11px;font-size:13.5px;font-weight:500;border-color:var(--line-2);color:var(--ink)}
 
+  .field input[readonly]{background:var(--soft);color:var(--ink-2)}
+  .swatches{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 12px}
+  .swatch{width:30px;height:30px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 1px var(--line-2);cursor:pointer;padding:0}
+  .swatch[aria-pressed="true"]{box-shadow:0 0 0 2px var(--ink)}
+  .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px}
+  .steps{background:var(--soft);border-radius:var(--r);padding:12px 16px 12px 34px;margin:0 0 18px;font-size:14px;color:var(--ink-2)}
+  .steps li{margin:5px 0}
+  .steps code{background:#fff;border:1px solid var(--line);border-radius:6px;padding:1px 6px;font-size:13px;word-break:break-all}
+  .p-admin{background:var(--warn-bg);color:var(--warn)}
+  .p-off{background:var(--bad-bg);color:var(--bad)}
+
   /* list */
   .filters{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px}
   .filters select,.filters input{background:#fff;border:1px solid var(--line-2);border-radius:var(--r);padding:9px 11px}
@@ -133,6 +144,7 @@
   <div class="tabs" role="tablist">
     <button role="tab" id="tabPost" aria-selected="true">Post requirement</button>
     <button role="tab" id="tabList" aria-selected="false">All requirements <span id="reqCount"></span></button>
+    <button role="tab" id="tabTeam" aria-selected="false" hidden>Team</button>
   </div>
 
   <!-- post / edit form -->
@@ -169,11 +181,23 @@
     <div class="grid2">
       <div class="field">
         <label for="fTrade">Trade <span class="req">*</span></label>
-        <select id="fTrade"></select>
+        <div class="site-row">
+          <select id="fTrade"></select>
+          <button class="linkbtn" id="addTradeBtn" type="button">+ New trade</button>
+        </div>
       </div>
       <div class="field">
         <label for="fTitle">Work title <span class="req">*</span> <span class="hint">— shown in bold on the card</span></label>
         <input id="fTitle" placeholder="e.g. Gypsum plaster work">
+      </div>
+      <div class="newsite full" id="newTradeBox" hidden>
+        <div class="field"><label for="ntName">New trade name <span class="req">*</span> <span class="hint">— everyone will see it in the trade list</span></label><input id="ntName" placeholder="e.g. Glazing"></div>
+        <div class="field" style="margin-bottom:0"><label>Card colour</label><div class="swatches" id="ntSwatches"></div></div>
+        <div class="err" id="ntErr" hidden></div>
+        <div class="actions" style="margin-top:4px">
+          <button class="btn btn-sm" id="ntSave" type="button">Add trade</button>
+          <button class="btn btn-sm" id="ntCancel" type="button">Cancel</button>
+        </div>
       </div>
       <div class="field full">
         <label for="fDesc">Description</label>
@@ -222,6 +246,8 @@
       </div>
     </div>
 
+    <p class="muted" id="contactNote" hidden style="margin:-4px 0 14px;font-size:13.5px">Contact details come from your profile, so contractors call you.</p>
+
     <details class="lang">
       <summary>Hindi / Marathi text (optional — English shows if left blank)</summary>
       <div class="grid2">
@@ -254,8 +280,21 @@
         <option value="">All</option>
       </select>
       <select id="lSite"></select>
+      <select id="lBy" hidden></select>
     </div>
     <div id="list"></div>
+  </section>
+
+  <!-- team (admins only) -->
+  <section class="panel" id="teamView" hidden>
+    <h2>Team</h2>
+    <p class="sub">People who can sign in here and post requirements. Posters see and edit only their own.</p>
+    <ol class="steps">
+      <li>Supabase → Authentication → Users → Add user → Create new user. Enter their email and a password, and tick <b>Auto Confirm User</b>.</li>
+      <li>Supabase → SQL Editor → run <code>select add_poster('their@email.com', 'Full name', '98XXXXXXXX');</code></li>
+      <li>Send them this page's link, their email and the password.</li>
+    </ol>
+    <div id="teamList" style="overflow-x:auto"></div>
   </section>
 </main>
 
@@ -270,13 +309,14 @@ const SUPABASE_ANON = 'sb_publishable_pEdixshOAX-elMGPIlDBAw_bWZLnp5D';
 const db = createClient(SUPABASE_URL, SUPABASE_ANON);
 
 // ─── lists ────────────────────────────────────────────────
-const TRADES = ['RCC','Masonry','Plaster','Plumbing','Electrical','Tiling','Painting','Waterproofing','Fabrication','Carpentry'];
+const SWATCHES = ['#7A5C9E','#1D9E75','#2E7CC4','#C97A16','#C1524A','#D4688A','#2A9AA8','#5B6670','#A0652D','#C28D2C'];
 const BASIS = {labour_rate:'Labour rate basis', with_material:'With material', labour_plus_shuttering:'Labour + shuttering', turnkey:'Turnkey'};
 const UNITS = {per_sft:'per sft', per_cum:'per cum', per_brass:'per brass', per_rmt:'per rmt', per_mt:'per MT', per_flat:'per flat', per_day:'per day', lumpsum:'lumpsum'};
 const RESP_STATUS = ['new','contacted','shortlisted','awarded','rejected'];
 
 // ─── state & helpers ──────────────────────────────────────
-let projects = [], reqs = [], editingId = null, openResp = null;
+let projects = [], trades = [], staff = [], profile = null, reqs = [], editingId = null, openResp = null, ntColor = SWATCHES[0];
+const isAdmin = () => profile?.role === 'admin';
 const el = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const opts = (obj, sel) => Object.entries(obj).map(([k,v]) => `<option value="${k}"${k===sel?' selected':''}>${esc(v)}</option>`).join('');
@@ -287,7 +327,6 @@ function toast(msg){
 }
 function showErr(id, msg){ el(id).textContent = msg; el(id).hidden = !msg; }
 
-el('fTrade').innerHTML = TRADES.map(t => `<option>${t}</option>`).join('');
 el('fBasis').innerHTML = opts(BASIS, 'labour_rate');
 el('fUnit').innerHTML  = opts(UNITS, 'per_sft');
 
@@ -301,23 +340,43 @@ function showLogin(){
   el('logoutBtn').hidden = true; el('who').textContent = '';
 }
 async function enterApp(session){
+  const { data: me, error: meErr } = await db.from('staff_profiles').select('*').eq('user_id', session.user.id).maybeSingle();
+  if(meErr || !me || !me.active){
+    await db.auth.signOut(); showLogin();
+    showErr('lErr', meErr ? 'Could not check your account: ' + meErr.message : 'This login is not set up for posting yet. Ask the admin to add you.');
+    return;
+  }
+  profile = me;
   el('loginView').hidden = true; el('appView').hidden = false;
-  el('logoutBtn').hidden = false; el('who').textContent = session.user.email;
-  // remember last contact used, so the site engineer doesn't retype it
-  el('fContact').value = localStorage.getItem('adm_contact') || '';
-  el('fMobile').value  = localStorage.getItem('adm_mobile')  || '';
-  await Promise.all([loadProjects(), loadReqs()]);
+  el('logoutBtn').hidden = false;
+  el('who').textContent = `${me.full_name} · ${isAdmin() ? 'Admin' : 'Poster'}`;
+  el('tabList').childNodes[0].textContent = isAdmin() ? 'All requirements ' : 'My requirements ';
+  el('tabTeam').hidden = !isAdmin(); el('lBy').hidden = !isAdmin();
+  applyContact();
+  await Promise.all([loadProjects(), loadTrades(), loadReqs(), isAdmin() ? loadStaff() : Promise.resolve()]);
+}
+// posters always post under their own name and mobile; admins can change it
+function applyContact(){
+  if(!profile) return;
+  const poster = !isAdmin();
+  el('fContact').readOnly = poster; el('fMobile').readOnly = poster;
+  el('contactNote').hidden = !poster;
+  if(poster){ el('fContact').value = profile.full_name; el('fMobile').value = profile.mobile || ''; }
+  else {
+    el('fContact').value = localStorage.getItem('adm_contact') || profile.full_name;
+    el('fMobile').value  = localStorage.getItem('adm_mobile')  || profile.mobile || '';
+  }
 }
 el('loginBtn').onclick = async () => {
   showErr('lErr','');
   const btn = el('loginBtn'); btn.disabled = true; btn.textContent = 'Signing in…';
   const { data, error } = await db.auth.signInWithPassword({ email: el('lEmail').value.trim(), password: el('lPass').value });
   btn.disabled = false; btn.textContent = 'Sign in';
-  if(error){ showErr('lErr', 'Wrong email or password.'); return; }
+  if(error){ showErr('lErr', error.status === 400 ? 'Wrong email or password.' : 'Could not sign in: ' + error.message + (error.status ? ' (' + error.status + ')' : '')); return; }
   enterApp(data.session);
 };
 el('lPass').addEventListener('keydown', e => { if(e.key === 'Enter') el('loginBtn').click(); });
-el('logoutBtn').onclick = async () => { await db.auth.signOut(); showLogin(); };
+el('logoutBtn').onclick = async () => { await db.auth.signOut(); profile = null; showLogin(); };
 
 // ─── data ─────────────────────────────────────────────────
 async function loadProjects(){
@@ -332,6 +391,30 @@ async function loadProjects(){
   el('lSite').innerHTML = `<option value="">All sites</option>` + projects.map(p => `<option value="${p.id}">${esc(p.name)}</option>`).join('');
   el('lSite').value = keepL;
 }
+async function loadTrades(){
+  const { data, error } = await db.from('trades').select('id,name,color').order('name');
+  if(error){ toast('Could not load trades: ' + error.message); return; }
+  trades = data || [];
+  const keep = el('fTrade').value;
+  el('fTrade').innerHTML = `<option value="">Choose trade</option>` + trades.map(t => `<option>${esc(t.name)}</option>`).join('');
+  if(keep) el('fTrade').value = keep;
+}
+function ensureTradeOption(name){
+  if(name && ![...el('fTrade').options].some(o => o.value === name)){
+    const o = document.createElement('option'); o.textContent = name; el('fTrade').appendChild(o);
+  }
+}
+async function loadStaff(){
+  const { data, error } = await db.from('staff_profiles').select('*').order('role').order('full_name');
+  if(error){ toast('Could not load team: ' + error.message); return; }
+  staff = data || [];
+  const keep = el('lBy').value;
+  el('lBy').innerHTML = `<option value="">All posters</option>` + staff.map(x => `<option value="${x.user_id}">${esc(x.full_name)}</option>`).join('') + `<option value="_none">Older (no owner)</option>`;
+  el('lBy').value = keep;
+  renderTeam(); renderList();
+}
+const staffName = id => staff.find(x => x.user_id === id)?.full_name || (id ? 'Unknown' : 'Before accounts');
+
 async function loadReqs(){
   const { data, error } = await db.from('requirements')
     .select('*, projects(name), responses(count)')
@@ -341,11 +424,6 @@ async function loadReqs(){
   el('reqCount').textContent = `(${reqs.filter(r => r.status === 'open').length} open)`;
   renderList();
 }
-function nextCode(){
-  const nums = reqs.map(r => /^REQ-(\d+)$/.exec(r.req_code || '')).filter(Boolean).map(m => +m[1]);
-  return 'REQ-' + String((nums.length ? Math.max(...nums) : 0) + 1).padStart(3,'0');
-}
-
 // ─── new site ─────────────────────────────────────────────
 el('addSiteBtn').onclick = () => { el('newSiteBox').hidden = false; el('nsName').focus(); };
 el('nsCancel').onclick = () => { el('newSiteBox').hidden = true; showErr('nsErr',''); };
@@ -362,6 +440,35 @@ el('nsSave').onclick = async () => {
   toast('Site added');
 };
 
+// ─── new trade ────────────────────────────────────────────
+function drawSwatches(){
+  el('ntSwatches').innerHTML = SWATCHES.map(c =>
+    `<button type="button" class="swatch" style="background:${c}" data-c="${c}" aria-label="Colour ${c}" aria-pressed="${c === ntColor}"></button>`).join('');
+}
+el('ntSwatches').addEventListener('click', e => {
+  const b = e.target.closest('[data-c]'); if(!b) return;
+  ntColor = b.dataset.c; drawSwatches();
+});
+el('addTradeBtn').onclick = () => {
+  const used = new Set(trades.map(t => String(t.color).toUpperCase()));
+  ntColor = SWATCHES.find(c => !used.has(c.toUpperCase())) || SWATCHES[0];
+  drawSwatches(); el('newTradeBox').hidden = false; el('ntName').focus();
+};
+el('ntCancel').onclick = () => { el('newTradeBox').hidden = true; showErr('ntErr',''); };
+el('ntSave').onclick = async () => {
+  const name = el('ntName').value.trim().replace(/\s+/g,' ');
+  if(!name){ showErr('ntErr','Enter the trade name.'); return; }
+  if(trades.some(t => t.name.toLowerCase() === name.toLowerCase())){ showErr('ntErr','This trade is already in the list.'); return; }
+  const btn = el('ntSave'); btn.disabled = true;
+  const { error } = await db.from('trades').insert({ name, color: ntColor });
+  btn.disabled = false;
+  if(error){ showErr('ntErr', error.code === '23505' ? 'This trade is already in the list.' : error.message); return; }
+  await loadTrades();
+  el('fTrade').value = name;
+  el('ntName').value = ''; el('newTradeBox').hidden = true; showErr('ntErr','');
+  toast('Trade added. Everyone can see it now.');
+};
+
 // ─── form ─────────────────────────────────────────────────
 const TEXT_FIELDS = { fBuilding:'building', fTitle:'work_title', fDesc:'work_description', fQuantum:'work_quantum',
   fContact:'contact_name', fTitleHi:'work_title_hi', fTitleMr:'work_title_mr', fDescHi:'work_description_hi', fDescMr:'work_description_mr' };
@@ -371,8 +478,9 @@ const PER_JOB = ['fTitle','fDesc','fQuantum','fCount','fTitleHi','fTitleMr','fDe
 function readForm(){
   const mobile = el('fMobile').value.replace(/\D/g,'').slice(-10);
   if(!el('fSite').value) return { err:'Choose a site.' };
+  if(!el('fTrade').value) return { err:'Choose a trade.' };
   if(!el('fTitle').value.trim()) return { err:'Enter a work title.' };
-  if(!/^[6-9]\d{9}$/.test(mobile)) return { err:'Enter a valid 10 digit contact mobile.' };
+  if(!/^[6-9]\d{9}$/.test(mobile)) return { err: isAdmin() ? 'Enter a valid 10 digit contact mobile.' : 'Your profile has no valid mobile number. Ask the admin to fix it.' };
   const row = {
     project_id: el('fSite').value,
     trade: el('fTrade').value,
@@ -397,6 +505,7 @@ function resetForm(keepShared){
   }
   el('fPublished').checked = true;
   showErr('fErr','');
+  applyContact();
 }
 
 function setEditMode(r){
@@ -421,19 +530,19 @@ async function save(addAnother){
     ({ error } = await db.from('requirements').update(row).eq('id', editingId));
     code = reqs.find(r => r.id === editingId)?.req_code;
   } else {
-    for(let attempt = 0; attempt < 2; attempt++){
-      code = nextCode();
-      ({ error } = await db.from('requirements').insert({ ...row, req_code: code, status:'open' }));
-      if(error?.code === '23505'){ await loadReqs(); continue; }   // someone else took that code — try the next one
-      break;
-    }
+    // the database hands out the next free code, so two people posting at once never clash
+    let made;
+    ({ data: made, error } = await db.from('requirements').insert({ ...row, status:'open' }).select('req_code').single());
+    code = made?.req_code;
   }
 
   [el('saveBtn'), el('saveAnotherBtn')].forEach(b => b.disabled = false);
   if(error){ showErr('fErr', 'Could not save: ' + error.message); return; }
 
-  localStorage.setItem('adm_contact', row.contact_name || '');
-  localStorage.setItem('adm_mobile', row.contact_mobile);
+  if(isAdmin()){
+    localStorage.setItem('adm_contact', row.contact_name || '');
+    localStorage.setItem('adm_mobile', row.contact_mobile);
+  }
 
   const wasEdit = !!editingId;
   toast(wasEdit ? `${code} updated` : `${code} saved${row.published ? ' — live on the board' : ' (hidden)'}`);
@@ -450,7 +559,7 @@ el('cancelEditBtn').onclick = () => { setEditMode(null); resetForm(false); showT
 function editReq(id){
   const r = reqs.find(x => x.id === id); if(!r) return;
   el('fSite').value = r.project_id;
-  el('fTrade').value = TRADES.includes(r.trade) ? r.trade : TRADES[0];
+  ensureTradeOption(r.trade); el('fTrade').value = r.trade;
   el('fBasis').value = r.basis; el('fUnit').value = r.rate_unit;
   el('fCount').value = r.required_count ?? '';
   el('fStart').value = r.start_date || '';
@@ -458,6 +567,7 @@ function editReq(id){
   el('fMobile').value = r.contact_mobile || '';
   el('fPublished').checked = !!r.published;
   for(const [fid, col] of Object.entries(TEXT_FIELDS)) el(fid).value = r[col] || '';
+  if(!isAdmin()) applyContact();
   setEditMode(r);
   showTab('post');
   window.scrollTo({ top:0, behavior:'smooth' });
@@ -465,13 +575,14 @@ function editReq(id){
 
 // ─── tabs ─────────────────────────────────────────────────
 function showTab(which){
-  const post = which === 'post';
-  el('postView').hidden = !post; el('listView').hidden = post;
-  el('tabPost').setAttribute('aria-selected', String(post));
-  el('tabList').setAttribute('aria-selected', String(!post));
+  el('postView').hidden = which !== 'post';
+  el('listView').hidden = which !== 'list';
+  el('teamView').hidden = which !== 'team';
+  [['Post','post'],['List','list'],['Team','team']].forEach(([n,k]) => el('tab'+n).setAttribute('aria-selected', String(which === k)));
 }
 el('tabPost').onclick = () => showTab('post');
 el('tabList').onclick = () => showTab('list');
+el('tabTeam').onclick = () => showTab('team');
 
 // ─── list ─────────────────────────────────────────────────
 function pill(r){
@@ -480,9 +591,10 @@ function pill(r){
   return r.published ? '<span class="pill p-live">Live on board</span>' : '<span class="pill p-hidden">Hidden</span>';
 }
 function renderList(){
-  const q = el('lq').value.trim().toLowerCase(), st = el('lStatus').value, site = el('lSite').value;
+  const q = el('lq').value.trim().toLowerCase(), st = el('lStatus').value, site = el('lSite').value, by = el('lBy').value;
   const list = reqs.filter(r =>
     (!st || r.status === st) && (!site || r.project_id === site) &&
+    (!by || (by === '_none' ? !r.created_by : r.created_by === by)) &&
     (!q || [r.req_code, r.work_title, r.building, r.trade].join(' ').toLowerCase().includes(q)));
 
   if(!list.length){ el('list').innerHTML = `<div class="empty">Nothing here yet. Use "Post requirement" to add one.</div>`; return; }
@@ -493,7 +605,7 @@ function renderList(){
     <article class="req-item">
       <div class="req-top">
         <div class="req-main">
-          <div class="code">${esc(r.req_code)} · ${esc(r.projects?.name)}${r.building ? ' · ' + esc(r.building) : ''}</div>
+          <div class="code">${esc(r.req_code)} · ${esc(r.projects?.name)}${r.building ? ' · ' + esc(r.building) : ''}${isAdmin() ? ' · by ' + esc(staffName(r.created_by)) : ''}</div>
           <div class="req-title">${esc(r.work_title)}</div>
           <div class="req-meta">${esc(r.trade)} · ${r.required_count ?? '—'} workers · starts ${fmtDate(r.start_date)} · ${esc(BASIS[r.basis] || r.basis)}, ${esc(UNITS[r.rate_unit] || r.rate_unit)}</div>
         </div>
@@ -503,7 +615,8 @@ function renderList(){
         <button class="btn btn-sm" data-act="resp" data-id="${r.id}">${openResp === r.id ? 'Hide' : 'View'} responses (${n})</button>
         <button class="btn btn-sm" data-act="edit" data-id="${r.id}">Edit</button>
         ${r.status === 'open'
-          ? `<button class="btn btn-sm" data-act="pub" data-id="${r.id}">${r.published ? 'Hide from board' : 'Show on board'}</button>
+          ? `${r.published ? `<button class="btn btn-sm" data-act="share" data-id="${r.id}">Share on WhatsApp</button>` : ''}
+             <button class="btn btn-sm" data-act="pub" data-id="${r.id}">${r.published ? 'Hide from board' : 'Show on board'}</button>
              <button class="btn btn-sm" data-act="filled" data-id="${r.id}">Mark filled</button>`
           : `<button class="btn btn-sm" data-act="reopen" data-id="${r.id}">Reopen</button>`}
       </div>
@@ -513,13 +626,14 @@ function renderList(){
 
   if(openResp && list.some(r => r.id === openResp)) loadResponses(openResp);
 }
-['lq','lStatus','lSite'].forEach(id => el(id).addEventListener('input', renderList));
+['lq','lStatus','lSite','lBy'].forEach(id => el(id).addEventListener('input', renderList));
 
 el('list').addEventListener('click', async e => {
   const b = e.target.closest('[data-act]'); if(!b) return;
   const id = b.dataset.id, r = reqs.find(x => x.id === id);
   switch(b.dataset.act){
     case 'edit':   editReq(id); break;
+    case 'share':  shareReq(r); break;
     case 'resp':   openResp = openResp === id ? null : id; renderList(); break;
     case 'pub':    await patchReq(id, { published: !r.published }, r.published ? 'Hidden from board' : 'Now live on board'); break;
     case 'filled':
@@ -529,11 +643,52 @@ el('list').addEventListener('click', async e => {
     case 'reopen': await patchReq(id, { status:'open' }, `${r.req_code} reopened`); break;
   }
 });
+// opens WhatsApp with a short message; the link shows as a card with the work details
+function shareReq(r){
+  const link = `${location.origin}/api/r/${r.id}`;
+  const msg = `${r.trade} work at ${r.projects?.name || 'Mangalam site'}\n${r.work_title}\nQuote your rate. No fee, no login.\n${link}`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+}
 async function patchReq(id, changes, msg){
   const { error } = await db.from('requirements').update({ ...changes, updated_at: new Date().toISOString() }).eq('id', id);
   if(error){ toast('Could not update: ' + error.message); return; }
   toast(msg); await loadReqs();
 }
+
+// ─── team (admins) ────────────────────────────────────────
+function renderTeam(){
+  if(!isAdmin()) return;
+  el('teamList').innerHTML = `<table style="min-width:640px">
+    <thead><tr><th>Name</th><th>Email</th><th>Mobile</th><th>Role</th><th></th></tr></thead>
+    <tbody>${staff.map(x => `<tr>
+      <td><b>${esc(x.full_name)}</b></td>
+      <td>${esc(x.email)}</td>
+      <td>${esc(x.mobile || '—')}</td>
+      <td>${x.role === 'admin' ? '<span class="pill p-admin">Admin</span>' : '<span class="pill p-hidden">Poster</span>'}${x.active ? '' : ' <span class="pill p-off">Off</span>'}</td>
+      <td style="white-space:nowrap">
+        <button class="btn btn-sm" data-t="edit" data-id="${x.user_id}">Edit</button>
+        ${x.user_id === profile.user_id ? '' : `<button class="btn btn-sm" data-t="toggle" data-id="${x.user_id}">${x.active ? 'Turn off' : 'Turn on'}</button>`}
+      </td></tr>`).join('')}</tbody></table>`;
+}
+el('teamList').addEventListener('click', async e => {
+  const b = e.target.closest('[data-t]'); if(!b) return;
+  const x = staff.find(v => v.user_id === b.dataset.id); if(!x) return;
+  let changes, msg;
+  if(b.dataset.t === 'toggle'){
+    changes = { active: !x.active }; msg = x.active ? `${x.full_name} turned off` : `${x.full_name} turned on`;
+  } else {
+    const name = prompt('Full name', x.full_name); if(name === null) return;
+    const mob  = prompt('Mobile number (10 digits)', x.mobile || ''); if(mob === null) return;
+    const digits = mob.replace(/\D/g,'').slice(-10);
+    if(digits && !/^[6-9]\d{9}$/.test(digits)){ toast('Enter a valid 10 digit mobile number.'); return; }
+    changes = { full_name: name.trim() || x.full_name, mobile: digits || null }; msg = 'Saved';
+  }
+  const { error } = await db.from('staff_profiles').update(changes).eq('user_id', x.user_id);
+  if(error){ toast(error.code === '23505' ? 'That mobile number is already used by someone else.' : 'Could not update: ' + error.message); return; }
+  toast(msg);
+  if(x.user_id === profile.user_id){ profile = { ...profile, ...changes }; el('who').textContent = `${profile.full_name} · Admin`; applyContact(); }
+  await loadStaff();
+});
 
 // ─── responses ────────────────────────────────────────────
 async function loadResponses(reqId){
